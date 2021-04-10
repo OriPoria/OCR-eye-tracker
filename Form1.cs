@@ -153,11 +153,6 @@ namespace Tesseract_OCR
                 textFile.WordFile = file;
                 wordsFromFile = textFile.PagesText;
             }
-            using (FileStream file = new FileStream(currTest + ".pdf", FileMode.Open, FileAccess.Read))
-            {
-                textFile.PdfFile = file;
-                imgs = textFile.BitmapConverter();
-            }
             */
             // end test
             status_lbl.Text = "Loading...";
@@ -173,7 +168,7 @@ namespace Tesseract_OCR
             System.IO.Directory.CreateDirectory(Environment.CurrentDirectory + @"\Output");
 
 
-            // dictionary for the frequncies and temporary for shorst phrase recognition
+            // dictionary for the frequncies and temporary for shorst phrase recognition 
             Dictionary<string, int> wordsMap = new Dictionary<string, int>();
 
             int aoiNumber = 1;
