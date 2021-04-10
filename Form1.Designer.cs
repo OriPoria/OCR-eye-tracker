@@ -1,4 +1,6 @@
-﻿namespace Tesseract_OCR
+﻿using System;
+
+namespace Tesseract_OCR
 {
     partial class Form1
     {
@@ -28,34 +30,40 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btOCR = new System.Windows.Forms.Button();
+            this.start_btn = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.button1 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.separate_checkBox = new System.Windows.Forms.CheckBox();
+            this.separate_xml_cb = new System.Windows.Forms.CheckBox();
             this.RLinch = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
+            this.pad_rl_lbl = new System.Windows.Forms.Label();
+            this.inch_rl_lbl = new System.Windows.Forms.Label();
+            this.pad_ud_lbl = new System.Windows.Forms.Label();
+            this.minimum_phase_lbl = new System.Windows.Forms.Label();
             this.UDinch = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.nameImage_txt = new System.Windows.Forms.TextBox();
-            this.txtResult = new System.Windows.Forms.TextBox();
+            this.mini_phase = new System.Windows.Forms.TextBox();
+            this.inch_ud_lbl = new System.Windows.Forms.Label();
+            this.text_name_tb = new System.Windows.Forms.TextBox();
+            this.status_lbl = new System.Windows.Forms.Label();
+            this.upload_imges_btn = new System.Windows.Forms.Button();
+            this.words_freq_cb = new System.Windows.Forms.CheckBox();
+            this.upload_word_btn = new System.Windows.Forms.Button();
+            this.instructions_lbl = new System.Windows.Forms.Label();
+            this.link_lbl = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
-            // btOCR
+            // start_btn
             // 
-            this.btOCR.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.btOCR.Location = new System.Drawing.Point(33, 330);
-            this.btOCR.Margin = new System.Windows.Forms.Padding(4);
-            this.btOCR.Name = "btOCR";
-            this.btOCR.Size = new System.Drawing.Size(326, 48);
-            this.btOCR.TabIndex = 0;
-            this.btOCR.Text = "Let\'s start!";
-            this.btOCR.UseVisualStyleBackColor = false;
-            this.btOCR.Click += new System.EventHandler(this.btOCR_Click);
+            this.start_btn.BackColor = System.Drawing.SystemColors.MenuHighlight;
+            this.start_btn.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.start_btn.Location = new System.Drawing.Point(25, 592);
+            this.start_btn.Margin = new System.Windows.Forms.Padding(4);
+            this.start_btn.Name = "start_btn";
+            this.start_btn.Size = new System.Drawing.Size(326, 48);
+            this.start_btn.TabIndex = 0;
+            this.start_btn.Text = "Let\'s start!";
+            this.start_btn.UseVisualStyleBackColor = false;
+            this.start_btn.Click += new System.EventHandler(this.start_btn_Click);
             // 
             // openFileDialog
             // 
@@ -63,7 +71,8 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(61, 106);
+            this.button1.Enabled = false;
+            this.button1.Location = new System.Drawing.Point(61, 280);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(264, 48);
@@ -74,136 +83,193 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(61, 161);
+            this.button3.Location = new System.Drawing.Point(61, 335);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(264, 43);
             this.button3.TabIndex = 4;
-            this.button3.Text = "Insert sentences or titles";
+            this.button3.Text = "Insert sentences, titles or words";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
-            // button2
+            // separate_xml_cb
             // 
-            this.button2.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.button2.Location = new System.Drawing.Point(61, 48);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(264, 51);
-            this.button2.TabIndex = 5;
-            this.button2.Text = "Upload image (1400 X 1082 size) ";
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_click);
-            // 
-            // separate_checkBox
-            // 
-            this.separate_checkBox.AutoSize = true;
-            this.separate_checkBox.Location = new System.Drawing.Point(65, 292);
-            this.separate_checkBox.Name = "separate_checkBox";
-            this.separate_checkBox.Size = new System.Drawing.Size(174, 20);
-            this.separate_checkBox.TabIndex = 6;
-            this.separate_checkBox.Text = "Create separate xml files";
-            this.separate_checkBox.UseVisualStyleBackColor = true;
+            this.separate_xml_cb.AutoSize = true;
+            this.separate_xml_cb.Checked = true;
+            this.separate_xml_cb.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.separate_xml_cb.Location = new System.Drawing.Point(64, 510);
+            this.separate_xml_cb.Name = "separate_xml_cb";
+            this.separate_xml_cb.Size = new System.Drawing.Size(218, 24);
+            this.separate_xml_cb.TabIndex = 6;
+            this.separate_xml_cb.Text = "Create separate xml files";
+            this.separate_xml_cb.UseVisualStyleBackColor = true;
             // 
             // RLinch
             // 
-            this.RLinch.Location = new System.Drawing.Point(217, 228);
+            this.RLinch.Location = new System.Drawing.Point(213, 415);
             this.RLinch.Name = "RLinch";
-            this.RLinch.Size = new System.Drawing.Size(48, 22);
+            this.RLinch.Size = new System.Drawing.Size(48, 26);
             this.RLinch.TabIndex = 7;
-            this.RLinch.TextChanged += new System.EventHandler(this.LRinch_click);
+            this.RLinch.Text = "15";
+            this.RLinch.TextChanged += new System.EventHandler(this.LRinch_Click);
             // 
-            // label1
+            // pad_rl_lbl
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(61, 231);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(138, 16);
-            this.label1.TabIndex = 8;
-            this.label1.Text = "Padding for right / left :";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
+            this.pad_rl_lbl.AutoSize = true;
+            this.pad_rl_lbl.Location = new System.Drawing.Point(21, 415);
+            this.pad_rl_lbl.Name = "pad_rl_lbl";
+            this.pad_rl_lbl.Size = new System.Drawing.Size(175, 20);
+            this.pad_rl_lbl.TabIndex = 8;
+            this.pad_rl_lbl.Text = "Padding for right / left:";
+            this.pad_rl_lbl.Click += new System.EventHandler(this.label1_Click);
             // 
-            // label2
+            // inch_rl_lbl
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(271, 234);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(32, 16);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "inch";
+            this.inch_rl_lbl.AutoSize = true;
+            this.inch_rl_lbl.Location = new System.Drawing.Point(267, 415);
+            this.inch_rl_lbl.Name = "inch_rl_lbl";
+            this.inch_rl_lbl.Size = new System.Drawing.Size(40, 20);
+            this.inch_rl_lbl.TabIndex = 9;
+            this.inch_rl_lbl.Text = "inch";
             // 
-            // label3
+            // pad_ud_lbl
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(61, 259);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(143, 16);
-            this.label3.TabIndex = 10;
-            this.label3.Text = "Padding for up / down :";
+            this.pad_ud_lbl.AutoSize = true;
+            this.pad_ud_lbl.Location = new System.Drawing.Point(21, 445);
+            this.pad_ud_lbl.Name = "pad_ud_lbl";
+            this.pad_ud_lbl.Size = new System.Drawing.Size(176, 20);
+            this.pad_ud_lbl.TabIndex = 10;
+            this.pad_ud_lbl.Text = "Padding for up / down:";
+            // 
+            // minimum_phase_lbl
+            // 
+            this.minimum_phase_lbl.AutoSize = true;
+            this.minimum_phase_lbl.Location = new System.Drawing.Point(21, 475);
+            this.minimum_phase_lbl.Name = "minimum_phase_lbl";
+            this.minimum_phase_lbl.Size = new System.Drawing.Size(188, 20);
+            this.minimum_phase_lbl.TabIndex = 10;
+            this.minimum_phase_lbl.Text = "Minimum phrase length:";
             // 
             // UDinch
             // 
-            this.UDinch.Location = new System.Drawing.Point(217, 258);
+            this.UDinch.Location = new System.Drawing.Point(213, 445);
             this.UDinch.Name = "UDinch";
-            this.UDinch.Size = new System.Drawing.Size(48, 22);
+            this.UDinch.Size = new System.Drawing.Size(48, 26);
             this.UDinch.TabIndex = 11;
-            this.UDinch.TextChanged += new System.EventHandler(this.UDinch_click);
+            this.UDinch.Text = "26";
+            this.UDinch.TextChanged += new System.EventHandler(this.UDinch_Click);
             // 
-            // label4
+            // mini_phase
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(271, 263);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(32, 16);
-            this.label4.TabIndex = 12;
-            this.label4.Text = "inch";
+            this.mini_phase.Location = new System.Drawing.Point(213, 475);
+            this.mini_phase.Name = "mini_phase";
+            this.mini_phase.Size = new System.Drawing.Size(48, 26);
+            this.mini_phase.TabIndex = 11;
+            this.mini_phase.TextChanged += new System.EventHandler(this.mini_phase_Click);
             // 
-            // label5
+            // inch_ud_lbl
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(61, 18);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(51, 16);
-            this.label5.TabIndex = 13;
-            this.label5.Text = "Name :";
+            this.inch_ud_lbl.AutoSize = true;
+            this.inch_ud_lbl.Location = new System.Drawing.Point(267, 445);
+            this.inch_ud_lbl.Name = "inch_ud_lbl";
+            this.inch_ud_lbl.Size = new System.Drawing.Size(40, 20);
+            this.inch_ud_lbl.TabIndex = 12;
+            this.inch_ud_lbl.Text = "inch";
             // 
-            // nameImage_txt
+            // text_name_tb
             // 
-            this.nameImage_txt.Location = new System.Drawing.Point(118, 12);
-            this.nameImage_txt.Name = "nameImage_txt";
-            this.nameImage_txt.Size = new System.Drawing.Size(164, 22);
-            this.nameImage_txt.TabIndex = 14;
-            this.nameImage_txt.TextChanged += new System.EventHandler(this.nameImage_click);
+            this.text_name_tb.Location = new System.Drawing.Point(118, 12);
+            this.text_name_tb.Name = "text_name_tb";
+            this.text_name_tb.Size = new System.Drawing.Size(164, 26);
+            this.text_name_tb.TabIndex = 14;
+            this.text_name_tb.Text = "Insert text name";
+            this.text_name_tb.Click += new System.EventHandler(this.text_name_tb_Click);
+            this.text_name_tb.TextChanged += new System.EventHandler(this.nameImage_Click);
             // 
-            // txtResult
+            // status_lbl
             // 
-            this.txtResult.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.txtResult.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtResult.Location = new System.Drawing.Point(159, 386);
-            this.txtResult.Margin = new System.Windows.Forms.Padding(4);
-            this.txtResult.Multiline = true;
-            this.txtResult.Name = "txtResult";
-            this.txtResult.Size = new System.Drawing.Size(90, 35);
-            this.txtResult.TabIndex = 1;
+            this.status_lbl.BackColor = System.Drawing.SystemColors.InactiveCaption;
+            this.status_lbl.Location = new System.Drawing.Point(148, 648);
+            this.status_lbl.Margin = new System.Windows.Forms.Padding(4);
+            this.status_lbl.Name = "status_lbl";
+            this.status_lbl.Size = new System.Drawing.Size(81, 35);
+            this.status_lbl.TabIndex = 1;
+            // 
+            // upload_imges_btn
+            // 
+            this.upload_imges_btn.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.upload_imges_btn.Location = new System.Drawing.Point(61, 63);
+            this.upload_imges_btn.Name = "upload_imges_btn";
+            this.upload_imges_btn.Size = new System.Drawing.Size(264, 50);
+            this.upload_imges_btn.TabIndex = 15;
+            this.upload_imges_btn.Text = "Upload images directory";
+            this.upload_imges_btn.UseVisualStyleBackColor = false;
+            this.upload_imges_btn.Click += new System.EventHandler(this.upload_images_btn_click);
+            // 
+            // words_freq_cb
+            // 
+            this.words_freq_cb.AutoSize = true;
+            this.words_freq_cb.Location = new System.Drawing.Point(64, 541);
+            this.words_freq_cb.Name = "words_freq_cb";
+            this.words_freq_cb.Size = new System.Drawing.Size(229, 24);
+            this.words_freq_cb.TabIndex = 16;
+            this.words_freq_cb.Text = "Calculate words frequency";
+            this.words_freq_cb.UseVisualStyleBackColor = true;
+            // 
+            // upload_word_btn
+            // 
+            this.upload_word_btn.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+            this.upload_word_btn.Location = new System.Drawing.Point(61, 119);
+            this.upload_word_btn.Name = "upload_word_btn";
+            this.upload_word_btn.Size = new System.Drawing.Size(264, 50);
+            this.upload_word_btn.TabIndex = 15;
+            this.upload_word_btn.Text = "Upload Word file";
+            this.upload_word_btn.UseVisualStyleBackColor = false;
+            this.upload_word_btn.Click += new System.EventHandler(this.upload_word_btn_Click);
+            // 
+            // instructions_lbl
+            // 
+            this.instructions_lbl.Location = new System.Drawing.Point(57, 187);
+            this.instructions_lbl.Name = "instructions_lbl";
+            this.instructions_lbl.Size = new System.Drawing.Size(280, 40);
+            this.instructions_lbl.TabIndex = 12;
+            this.instructions_lbl.Text = "To convert PDF file to directory of images use this link:";
+            this.instructions_lbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // link_lbl
+            // 
+            this.link_lbl.Location = new System.Drawing.Point(109, 227);
+            this.link_lbl.Name = "link_lbl";
+            this.link_lbl.Size = new System.Drawing.Size(184, 23);
+            this.link_lbl.TabIndex = 17;
+            this.link_lbl.TabStop = true;
+            this.link_lbl.Text = "https://pdftoimage.com";
+            this.link_lbl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_lbl_LinkClicked);
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(396, 419);
-            this.Controls.Add(this.nameImage_txt);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
+            this.ClientSize = new System.Drawing.Size(389, 696);
+            this.Controls.Add(this.text_name_tb);
+            this.Controls.Add(this.inch_ud_lbl);
             this.Controls.Add(this.UDinch);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.mini_phase);
+            this.Controls.Add(this.minimum_phase_lbl);
+            this.Controls.Add(this.pad_ud_lbl);
+            this.Controls.Add(this.inch_rl_lbl);
+            this.Controls.Add(this.pad_rl_lbl);
             this.Controls.Add(this.RLinch);
-            this.Controls.Add(this.separate_checkBox);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.separate_xml_cb);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.txtResult);
-            this.Controls.Add(this.btOCR);
+            this.Controls.Add(this.status_lbl);
+            this.Controls.Add(this.start_btn);
+            this.Controls.Add(this.upload_imges_btn);
+            this.Controls.Add(this.words_freq_cb);
+            this.Controls.Add(this.upload_word_btn);
+            this.Controls.Add(this.instructions_lbl);
+            this.Controls.Add(this.link_lbl);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
@@ -214,23 +280,31 @@
 
         }
 
+
+
         #endregion
 
-        private System.Windows.Forms.Button btOCR;
+        private System.Windows.Forms.Button start_btn;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.CheckBox separate_checkBox;
+        private System.Windows.Forms.Button upload_imges_btn;
+        private System.Windows.Forms.Button upload_word_btn;
+        private System.Windows.Forms.CheckBox separate_xml_cb;
+        private System.Windows.Forms.CheckBox words_freq_cb;
         private System.Windows.Forms.TextBox RLinch;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label pad_rl_lbl;
+        private System.Windows.Forms.Label inch_rl_lbl;
+        private System.Windows.Forms.Label pad_ud_lbl;
+        private System.Windows.Forms.Label minimum_phase_lbl;
         private System.Windows.Forms.TextBox UDinch;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox nameImage_txt;
-        private System.Windows.Forms.TextBox txtResult;
+        private System.Windows.Forms.TextBox mini_phase;
+        private System.Windows.Forms.Label inch_ud_lbl;
+        private System.Windows.Forms.TextBox text_name_tb;
+        private System.Windows.Forms.Label status_lbl;
+        private System.Windows.Forms.Label instructions_lbl;
+        private System.Windows.Forms.LinkLabel link_lbl;
+
         //private System.Windows.Forms.Button pic_click;
     }
 }

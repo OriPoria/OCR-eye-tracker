@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 using System.Windows.Forms;
+using Tesseract_OCR.Services;
 
 namespace Tesseract_OCR
 {
@@ -17,6 +13,7 @@ namespace Tesseract_OCR
             InitializeComponent();
         }
 
+
         private void txtAdd_click(object sender, EventArgs e)
         {
             if (textBox1.Text == "")
@@ -25,68 +22,135 @@ namespace Tesseract_OCR
             }
             if (textBox2.Text == "")
             {
-                MessageBox.Show("Please fill AOI_name");
+                MessageBox.Show("Please fill AOI name");
             }
             if (textBox1.Text != "" && textBox2.Text != "")
             {
-                listBox1.Items.Add(textBox1.Text + "," + textBox2.Text);
-            }
+                string text = StringService.CleanString(StringService.RemovePunctuation(textBox1.Text));
+                string name = textBox2.Text;
+                string dataStr = text + "," + name;
+                if (page_num_tb.Text.Length > 0)
+                {
+                    try
+                    {
+                        int.Parse(page_num_tb.Text);
+                    }
+                    catch (Exception)
+                    {
+                        MessageBox.Show("invalid page number");
+                        return;
+                    }
+                    finally
+                    {
+                        cleanTextBoxes();
+                    }
+                    dataStr = dataStr + "," + page_num_tb.Text;
+                }
+                addToList(name, text);
+                string[] strs = { dataStr };
+                File.AppendAllLines(@"./history.txt", strs);
 
-            textBox1.Text = " ";
-            textBox2.Text = " ";
+            }
+            cleanTextBoxes();
+
+        }
+        private void cleanTextBoxes()
+        {
+            textBox1.Text = "";
+            textBox2.Text = "";
+            page_num_tb.Text = "";
+
         }
 
         private void txtRemove_click(object sender, EventArgs e)
         {
-            if (listBox1.SelectedIndex != -1)
-            {
-                listBox1.Items.RemoveAt(listBox1.SelectedIndex);
-            }
+            if (long_units_lb.SelectedIndex != -1)
+                long_units_lb.Items.RemoveAt(long_units_lb.SelectedIndex);
         }
 
         private void txtClear_click(object sender, EventArgs e)
         {
-            listBox1.Items.Clear();
+            long_units_lb.Items.Clear();
         }
 
         private void txtSubmit_click(object sender, EventArgs e)
         {
-            var items = listBox1.Items;
-            Dictionary<string, List<string>> Sentences = new Dictionary<string, List<string>>();
+            Dictionary<string, List<string>> longUnits = new Dictionary<string, List<string>>();
+            Dictionary<string, List<string>> shortUnits = new Dictionary<string, List<string>>();
             string[] param;
-            var Sentence_txt = " ";
-            string[] par_sentence;
+            var sentenceTxt = " ";
+            string[] parSentence;
             
-            var AOI_name = " ";
+            var aoiName = " ";
+            var items = long_units_lb.Items;
+            // sentences include long and short phrases
+            foreach (string item in short_units_lb.Items)
+            {
+                param = item.Split(',');
+                string[] words = param[0].Split(' ');
+                List<string> shortPhrase = new List<string>();
+                for (int i = 0; i < words.Length; i++)
+                    shortPhrase.Add(words[i]);
+                shortUnits.Add(param[1], shortPhrase);
+                items.Add(item);
+            }
 
-            List<string> split_sentence = new List<string>();
+            List<string> splitSentence = new List<string>();
             foreach (string item in items)
             {
-                
                 param = item.Split(',');
                
-                Sentence_txt = param[0];
-                par_sentence = Sentence_txt.Split(' ');
-                for( int i =0;i<=par_sentence.Length-1;i++)
+                sentenceTxt = param[0];
+                parSentence = sentenceTxt.Split(' ');
+                for (int i = 0; i <= parSentence.Length - 1; i++)
                 {
-                    if (par_sentence[i] != "")
-                        split_sentence.Add(par_sentence[i]);
+                    if (parSentence[i] != "")
+                        splitSentence.Add(parSentence[i]);
                 }
                 
-                AOI_name = param[1];
-                if (AOI_name == " ")
-                {
+                aoiName = param[1];
+                if (aoiName == " ")
                     continue;
-                }
-                Sentences.Add(AOI_name, split_sentence);
-                split_sentence = new List<string>();
-                //Sentences.Add(par_sentence, AOI_name);
+
+                longUnits.Add(aoiName, splitSentence);
+
+                splitSentence = new List<string>();
             }
-            Form1.setSentences(Sentences);
+            Form1.SetSentences(longUnits, shortUnits);
             this.Close();
             MessageBox.Show("Saved !");
+
             
         
         }
+
+
+        private void history_btn_click(object sender, EventArgs e)
+        {
+            History histryForm = new History(this);
+            histryForm.Show();
+        }
+        private void excel_btn_click(object sender, EventArgs e)
+        {
+            ExcelService excelService = new ExcelService();
+            List<IEnumerable<string>> table = excelService.ReadExcelFile<string>();
+            foreach (List<string> line in table)
+            {
+                string text = (StringService.RemovePunctuationPhrase(line[1]));
+                string name = line[2];
+                addToList(name, text);
+            }
+        }
+        // the function gets the custom name and the text and decides the category of the text
+        // meanwhile without page
+        public void addToList(string customName, string text)
+        {
+            if (text.Split(' ').Length > 1)
+                long_units_lb.Items.Add(text + "," + customName);
+            else
+                short_units_lb.Items.Add(text + "," + customName);
+
+        }
+
     }
 }

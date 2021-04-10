@@ -11,7 +11,7 @@ using Tesseract_OCR;
 
 namespace Tesseract_OCR
 {
-    
+    // DEPRECATED CLASS
     public partial class Form2 : Form
     {
         //public ListBox.ObjectCollection items;
@@ -54,11 +54,6 @@ namespace Tesseract_OCR
 
         private void txtSubmit_Click(object sender, EventArgs e)
         {
-            Form1 form1 = new Form1();
-            //if (items != null)
-            //{
-            //    listBox1.Items = items;
-            //}
             var items = listBox1.Items;
             Dictionary<string, string> singleWords = new Dictionary<string, string>();
             string[] param;
@@ -72,20 +67,9 @@ namespace Tesseract_OCR
                 AOI_name = AOI_name.Replace(" ", "");
                 singleWords.Add(word_txt, AOI_name);
             }
-            Form1.setWords(singleWords);
+            Form1.SetWords(singleWords);
             this.Close();
             MessageBox.Show("Saved !");
-            //if(items != null)
-            //{
-            //    //form1.Controls[9].BackColor = Color.Green;
-            //    //form1.BackColor = Color.Green;
-            //    form1.button1_paint();
-            //    form1.Refresh();
-            //    //form1.BackColorChanged = true;
-
-            //}
-            
-
 
 
         }

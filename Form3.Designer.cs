@@ -28,32 +28,52 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.long_units_lb = new System.Windows.Forms.ListBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.textBox3 = new System.Windows.Forms.Label();
+            this.textBox4 = new System.Windows.Forms.Label();
+            this.page_num_tb = new System.Windows.Forms.TextBox();
             this.txtAdd = new System.Windows.Forms.Button();
             this.txtRemove = new System.Windows.Forms.Button();
             this.txtClear = new System.Windows.Forms.Button();
             this.txtSubmit = new System.Windows.Forms.Button();
+            this.page_txt_lbl = new System.Windows.Forms.Label();
+            this.short_units_lbl = new System.Windows.Forms.Label();
+            this.long_units_lbl = new System.Windows.Forms.Label();
+            this.history_btn = new System.Windows.Forms.Button();
+            this.excel_btn = new System.Windows.Forms.Button();
+            this.short_units_lb = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
-            // listBox1
+            // long units list box
             // 
-            this.listBox1.BackColor = System.Drawing.SystemColors.Menu;
-            this.listBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.Location = new System.Drawing.Point(4, 182);
-            this.listBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(454, 173);
-            this.listBox1.TabIndex = 0;
+            this.long_units_lb.BackColor = System.Drawing.SystemColors.Menu;
+            this.long_units_lb.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.long_units_lb.FormattingEnabled = true;
+            this.long_units_lb.ItemHeight = 17;
+            this.long_units_lb.Location = new System.Drawing.Point(0, 252);
+            this.long_units_lb.Margin = new System.Windows.Forms.Padding(4);
+            this.long_units_lb.Name = "long_units_lb";
+            this.long_units_lb.Size = new System.Drawing.Size(454, 157);
+            this.long_units_lb.TabIndex = 0;
+            // 
+            // short units list box
+            // 
+            this.short_units_lb.BackColor = System.Drawing.SystemColors.Menu;
+            this.short_units_lb.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.short_units_lb.FormattingEnabled = true;
+            this.short_units_lb.ItemHeight = 17;
+            this.short_units_lb.Location = new System.Drawing.Point(0, 473);
+            this.short_units_lb.Margin = new System.Windows.Forms.Padding(4);
+            this.short_units_lb.Name = "short_units_lb";
+            this.short_units_lb.Size = new System.Drawing.Size(454, 157);
+            this.short_units_lb.TabIndex = 0;
             // 
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.textBox1.Location = new System.Drawing.Point(136, 11);
+            this.textBox1.Location = new System.Drawing.Point(168, 9);
             this.textBox1.Margin = new System.Windows.Forms.Padding(4);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
@@ -62,33 +82,40 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(138, 134);
+            this.textBox2.Location = new System.Drawing.Point(168, 134);
             this.textBox2.Margin = new System.Windows.Forms.Padding(4);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(170, 22);
+            this.textBox2.Size = new System.Drawing.Size(170, 26);
             this.textBox2.TabIndex = 2;
             // 
             // textBox3
             // 
             this.textBox3.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.textBox3.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.textBox3.Location = new System.Drawing.Point(7, 10);
+            this.textBox3.Location = new System.Drawing.Point(1, 10);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(122, 15);
+            this.textBox3.Size = new System.Drawing.Size(162, 28);
             this.textBox3.TabIndex = 3;
-            this.textBox3.Text = "Sentence / Title : ";
+            this.textBox3.Text = "Sentence / Word: ";
             // 
             // textBox4
             // 
             this.textBox4.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.textBox4.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.textBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.textBox4.Location = new System.Drawing.Point(4, 137);
+            this.textBox4.Location = new System.Drawing.Point(12, 137);
             this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(86, 15);
+            this.textBox4.Size = new System.Drawing.Size(114, 23);
             this.textBox4.TabIndex = 4;
-            this.textBox4.Text = "AOI name :";
+            this.textBox4.Text = "AOI name:";
+            // 
+            // page_num_tb
+            // 
+            this.page_num_tb.Enabled = false;
+            this.page_num_tb.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.page_num_tb.Location = new System.Drawing.Point(168, 173);
+            this.page_num_tb.Name = "page_num_tb";
+            this.page_num_tb.Size = new System.Drawing.Size(86, 26);
+            this.page_num_tb.TabIndex = 4;
             // 
             // txtAdd
             // 
@@ -124,7 +151,7 @@
             // 
             this.txtSubmit.BackColor = System.Drawing.SystemColors.HotTrack;
             this.txtSubmit.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
-            this.txtSubmit.Location = new System.Drawing.Point(465, 236);
+            this.txtSubmit.Location = new System.Drawing.Point(465, 490);
             this.txtSubmit.Name = "txtSubmit";
             this.txtSubmit.Size = new System.Drawing.Size(103, 59);
             this.txtSubmit.TabIndex = 8;
@@ -132,12 +159,62 @@
             this.txtSubmit.UseVisualStyleBackColor = false;
             this.txtSubmit.Click += new System.EventHandler(this.txtSubmit_click);
             // 
+            // page_txt_lbl
+            // 
+            this.page_txt_lbl.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.page_txt_lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.page_txt_lbl.Location = new System.Drawing.Point(12, 176);
+            this.page_txt_lbl.Name = "page_txt_lbl";
+            this.page_txt_lbl.Size = new System.Drawing.Size(86, 19);
+            this.page_txt_lbl.TabIndex = 4;
+            this.page_txt_lbl.Text = "Page: ";
+            // 
+            // short_units_lbl
+            // 
+            this.short_units_lbl.Location = new System.Drawing.Point(1, 446);
+            this.short_units_lbl.Name = "short_units_lbl";
+            this.short_units_lbl.Size = new System.Drawing.Size(114, 23);
+            this.short_units_lbl.TabIndex = 4;
+            this.short_units_lbl.Text = "Words:";
+            // 
+            // long_units_lbl
+            // 
+            this.long_units_lbl.Location = new System.Drawing.Point(1, 225);
+            this.long_units_lbl.Name = "long_units_lbl";
+            this.long_units_lbl.Size = new System.Drawing.Size(100, 23);
+            this.long_units_lbl.TabIndex = 0;
+            this.long_units_lbl.Text = "Sentnces:";
+            // 
+            // history_btn
+            // 
+            this.history_btn.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.history_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.history_btn.Location = new System.Drawing.Point(465, 137);
+            this.history_btn.Name = "history_btn";
+            this.history_btn.Size = new System.Drawing.Size(103, 42);
+            this.history_btn.TabIndex = 9;
+            this.history_btn.Text = "History";
+            this.history_btn.UseVisualStyleBackColor = false;
+            this.history_btn.Click += new System.EventHandler(this.history_btn_click);
+            // 
+            // excel_btn
+            // 
+            this.excel_btn.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.excel_btn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
+            this.excel_btn.Location = new System.Drawing.Point(465, 185);
+            this.excel_btn.Name = "excel_btn";
+            this.excel_btn.Size = new System.Drawing.Size(103, 60);
+            this.excel_btn.TabIndex = 9;
+            this.excel_btn.Text = "Upload excel file";
+            this.excel_btn.UseVisualStyleBackColor = false;
+            this.excel_btn.Click += new System.EventHandler(this.excel_btn_click);
+            // 
             // Form3
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.ClientSize = new System.Drawing.Size(580, 406);
+            this.ClientSize = new System.Drawing.Size(591, 654);
             this.Controls.Add(this.txtSubmit);
             this.Controls.Add(this.txtClear);
             this.Controls.Add(this.txtRemove);
@@ -146,7 +223,14 @@
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.long_units_lb);
+            this.Controls.Add(this.page_txt_lbl);
+            this.Controls.Add(this.page_num_tb);
+            this.Controls.Add(this.history_btn);
+            this.Controls.Add(this.excel_btn);
+            this.Controls.Add(this.short_units_lb);
+            this.Controls.Add(this.short_units_lbl);
+            this.Controls.Add(this.long_units_lbl);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form3";
@@ -157,15 +241,23 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.ListBox listBox1;
+        public System.Windows.Forms.ListBox long_units_lb;
+        public System.Windows.Forms.ListBox short_units_lb;
+        private System.Windows.Forms.Label short_units_lbl;
+        private System.Windows.Forms.Label long_units_lbl;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.TextBox textBox3;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.Label textBox3;
+        private System.Windows.Forms.Label textBox4;
+        private System.Windows.Forms.Label page_txt_lbl;
+        private System.Windows.Forms.TextBox page_num_tb;
         private System.Windows.Forms.Button txtAdd;
         private System.Windows.Forms.Button txtRemove;
         private System.Windows.Forms.Button txtClear;
         private System.Windows.Forms.Button txtSubmit;
+        private System.Windows.Forms.Button history_btn;
+        private System.Windows.Forms.Button excel_btn;
+
+
     }
 }
