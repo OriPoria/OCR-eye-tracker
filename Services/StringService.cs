@@ -22,7 +22,7 @@ namespace Tesseract_OCR.Services
         // ' sign
         public static string RemovePunctuation(string inputString)
         {
-            inputString = Regex.Replace(inputString, "[^א-ת0-9'-]", String.Empty);
+            inputString = Regex.Replace(inputString, "[^א-ת0-9a-zA-Z'-]", String.Empty);
             if (inputString.EndsWith("-"))
                 inputString = inputString.Substring(0, inputString.Length - 1);
             return inputString;
@@ -46,6 +46,11 @@ namespace Tesseract_OCR.Services
                 i++;
             }
             return count;
+        }
+        public static string ConcatList(List<string> list, string delimiter)
+        {
+            return string.Join(delimiter, list.ToArray());
+
         }
     }
 }

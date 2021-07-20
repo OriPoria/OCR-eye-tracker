@@ -23,22 +23,22 @@ namespace Tesseract_OCR
             
             shortPhraseWorksheet = xlWorkBook.ActiveSheet as Excel.Worksheet;
             shortPhraseWorksheet.Name = "Words";
-            shortPhraseWorksheet.Cells[1, 1] = "Special words:";
+            shortPhraseWorksheet.Cells[1, 1] = "Target words:";
             shortPhraseWorksheet.Cells[1, 2] = "AOI name:";
             shortPhraseWorksheet.Cells[1, 3] = "Detected:";
             var index_row_words = 2;
             string shortSentence = "";
-            foreach (KeyValuePair<string, List<string>> entry in Form1.specialShortPhrases)
+            foreach (KeyValuePair<string, TargetShortPhrase> entry in Form1.targetShortPhrases)
             {
                 shortSentence = "";
-                foreach (string single in entry.Value)
+                foreach (string single in entry.Value.Phrase)
                 {
                     shortSentence += single + " ";
                 }
                 shortPhraseWorksheet.Cells[index_row_words, 1] = shortSentence;
                 shortPhraseWorksheet.Cells[index_row_words, 2] = entry.Key;
 
-                if (Form1.specialShortPhrasesRecognized.Contains(entry.Key))
+                if (Form1.targetShortPhrasesRecognized.Contains(entry.Key))
                 {
                     shortPhraseWorksheet.Cells[index_row_words, 3].Interior.Color = Excel.XlRgbColor.rgbLightGreen;
                 }
@@ -54,12 +54,12 @@ namespace Tesseract_OCR
             
             longPhraseWorksheet = xlWorkBook.Sheets.Add(misValue, misValue, 1, misValue) as Excel.Worksheet;
             longPhraseWorksheet.Name = "Sentences";
-            longPhraseWorksheet.Cells[1, 1] = "Special sentences:";
+            longPhraseWorksheet.Cells[1, 1] = "Target sentences:";
             longPhraseWorksheet.Cells[1, 2] = "AOI name:";
             longPhraseWorksheet.Cells[1, 3] = "Detected:";
             var index_row_sen = 2;
             string longSentence = "";
-            foreach (KeyValuePair<string, List<string>> entry in Form1.specialSentences)
+            foreach (KeyValuePair<string, List<string>> entry in Form1.targetSentences)
             {
                 longSentence = "";
                 foreach (string single in entry.Value)
@@ -68,7 +68,7 @@ namespace Tesseract_OCR
                 }
                 longPhraseWorksheet.Cells[index_row_sen, 1] = longSentence;
                 longPhraseWorksheet.Cells[index_row_sen, 2] = entry.Key;
-                if (Form1.specialSentencesRecognized.Contains(entry.Key))
+                if (Form1.targetSentencesRecognized.Contains(entry.Key))
                 {
                     longPhraseWorksheet.Cells[index_row_sen, 3].Interior.Color = Excel.XlRgbColor.rgbLightGreen;
                 }
@@ -115,7 +115,7 @@ namespace Tesseract_OCR
 
         }
 
-        public static void createPaddingFile(PaddingBuilder pb, string file_name)
+        public static void CreatePaddingFile(PaddingBuilder pb, string file_name)
         {
             Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
             Excel.Workbook xlWorkBook;
@@ -128,7 +128,7 @@ namespace Tesseract_OCR
             pb.Build(xlWorkSheet);
             xlApp.DisplayAlerts = false;
             System.IO.Directory.CreateDirectory(Environment.CurrentDirectory + @"\Output\Padding");
-            string path = @"\Output\Padding\padding_" + file_name + ".xlsx";
+            string path = @"\Output\Padding\AOI_boundaries-" + file_name + ".xlsx";
             xlWorkBook.SaveAs(Environment.CurrentDirectory + path, Microsoft.Office.Interop.Excel.XlFileFormat.xlOpenXMLWorkbook, misValue, misValue, misValue, misValue, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
 
             ExcelService.CloseSources(xlApp, xlWorkBook, new List<Excel.Worksheet>() { xlWorkSheet });

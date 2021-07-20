@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Tesseract_OCR.Services;
 
 namespace Tesseract_OCR
 {
@@ -36,6 +37,7 @@ namespace Tesseract_OCR
             Microsoft.Office.Interop.Word.Document[] pages = new Microsoft.Office.Interop.Word.Document[numberOfPages];
             pagesText = new string[numberOfPages];
             int pageStart = 0;
+
             for (int currentPageIndex = 1; currentPageIndex <= numberOfPages; currentPageIndex++)
             {
                 var page = wordFile.Range(pageStart);
@@ -55,10 +57,27 @@ namespace Tesseract_OCR
                 page.Copy();
                 pages[currentPageIndex - 1] = app.Documents.Add();
                 pages[currentPageIndex - 1].Range().Paste();
-                // clean string without \n \r \t etc.
-                pagesText[currentPageIndex - 1] = Services.StringService.CleanString(pages[currentPageIndex - 1].Content.Text);
+                // clean string to be without \n \r \t etc.
+                pagesText[currentPageIndex - 1] = StringService.CleanString(pages[currentPageIndex - 1].Content.Text);
             }
-            wordFile.Close();
+            
+            // in word file, header and footer are the same in all the pages
+            List<string> headers = new List<string>();
+            List<string> footers = new List<string>();
+            foreach (Section aSection in app.ActiveDocument.Sections)
+            {
+                foreach (HeaderFooter aHeader in aSection.Headers)
+                    headers.Add(aHeader.Range.Text);
+                foreach (HeaderFooter aFooter in aSection.Footers)
+                    footers.Add(aFooter.Range.Text);
+            }
+            string header = StringService.CleanString(StringService.ConcatList(headers, ""));
+            string footer = StringService.CleanString(StringService.ConcatList(footers, ""));
+            for (int i = 0; i < numberOfPages; i++)
+            {
+                pagesText[i] = header + pagesText[i] + footer;
+            }
+            wordFile.Close(false);
             app.Quit(false);
         }
 

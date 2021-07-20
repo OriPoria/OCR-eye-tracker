@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Drawing.Drawing2D;
 using System.Drawing;
+using System.Drawing.Imaging;
 
 namespace Tesseract_OCR
 {
     class ImageService
     {
+        // resizing with not good quality
         public static Bitmap ResizeImage(Bitmap mg, Size newSize)
         {
 
@@ -16,7 +18,6 @@ namespace Tesseract_OCR
             int y = 0;
 
             Bitmap bp;
-
 
             if ((mg.Width / Convert.ToDouble(newSize.Width)) > (mg.Height /
             Convert.ToDouble(newSize.Height)))
@@ -39,6 +40,32 @@ namespace Tesseract_OCR
             g.DrawImage(mg, rect, 0, 0, mg.Width, mg.Height, GraphicsUnit.Pixel);
 
             return bp;
+        }
+
+        // Higher quality resizing function
+        public static Bitmap ResizeImage(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
         }
     }
 }

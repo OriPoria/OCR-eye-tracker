@@ -10,9 +10,7 @@ namespace Tesseract_OCR
     // if the AOI is targeted, there is also a special name
     public class AOI : BlockInfo
     {
-        public string SpecialName;
         public string Group;
-        public bool IsSpecial;
-
+            
     }
 }

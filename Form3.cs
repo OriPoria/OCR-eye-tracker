@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Linq;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
@@ -26,7 +27,7 @@ namespace Tesseract_OCR
             }
             if (textBox1.Text != "" && textBox2.Text != "")
             {
-                string text = StringService.CleanString(StringService.RemovePunctuation(textBox1.Text));
+                string text = StringService.CleanString(StringService.RemovePunctuationPhrase(textBox1.Text));
                 string name = textBox2.Text;
                 string dataStr = text + "," + name;
                 if (page_num_tb.Text.Length > 0)
@@ -77,22 +78,27 @@ namespace Tesseract_OCR
         {
             Dictionary<string, List<string>> longUnits = new Dictionary<string, List<string>>();
             Dictionary<string, List<string>> shortUnits = new Dictionary<string, List<string>>();
+            List<List<string>> offText = new List<List<string>>();
             string[] param;
             var sentenceTxt = " ";
             string[] parSentence;
-            
+            string[] words;
+
+            foreach (string item in off_text_lb.Items)
+                offText.Add(item.Split(' ').OfType<string>().ToList());
+
             var aoiName = " ";
             var items = long_units_lb.Items;
-            // sentences include long and short phrases
             foreach (string item in short_units_lb.Items)
             {
                 param = item.Split(',');
-                string[] words = param[0].Split(' ');
+                words = param[0].Split(' ');
                 List<string> shortPhrase = new List<string>();
                 for (int i = 0; i < words.Length; i++)
                     shortPhrase.Add(words[i]);
                 shortUnits.Add(param[1], shortPhrase);
-                items.Add(item);
+                // sentences include long and short phrases:
+         //       items.Add(param[0] + ',' + param[1]);
             }
 
             List<string> splitSentence = new List<string>();
@@ -116,11 +122,9 @@ namespace Tesseract_OCR
 
                 splitSentence = new List<string>();
             }
-            Form1.SetSentences(longUnits, shortUnits);
+            Form1.SetSentences(longUnits, shortUnits, offText);
             this.Close();
             MessageBox.Show("Saved !");
-
-            
         
         }
 
@@ -145,12 +149,18 @@ namespace Tesseract_OCR
         // meanwhile without page
         public void addToList(string customName, string text)
         {
+            if (customName == "off_text")
+            {
+                off_text_lb.Items.Add(text);
+                return;
+            }
             if (text.Split(' ').Length > 1)
                 long_units_lb.Items.Add(text + "," + customName);
             else
                 short_units_lb.Items.Add(text + "," + customName);
 
         }
+
 
     }
 }

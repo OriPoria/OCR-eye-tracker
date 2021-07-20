@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Tesseract_OCR.Services
 {
@@ -23,7 +24,7 @@ namespace Tesseract_OCR.Services
             correctWord = ocrWord;
             wordListPointer = index;
             string listWord = index < wordsList.Length ? wordsList[index] : "";
-            if (listWord == "הראשונה")
+            if (listWord == "בסריקות")
             {
                 var x = 3;
             }
@@ -31,8 +32,11 @@ namespace Tesseract_OCR.Services
             {
                 if (AreSimilar(ocrWord, listWord))
                     correctWord = listWord;
+                
+                else if (Regex.IsMatch(listWord, "^[a-zA-Z0-9]*$") && listWord.Length > 0)
+                    correctWord = listWord;
 
-                if (AreDifferent(ocrWord, listWord))
+                else if (AreDifferent(ocrWord, listWord))
                 {
                     string newWord;
                     if (index > 0)
