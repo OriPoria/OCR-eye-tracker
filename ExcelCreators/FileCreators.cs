@@ -1,19 +1,121 @@
-﻿using System;
+﻿using OfficeOpenXml;
+
+using System;
 using System.Collections.Generic;
-using System.Runtime.InteropServices;
+using System.IO;
+
+using Tesseract_OCR.ExcelCreators;
 using Tesseract_OCR.Services;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace Tesseract_OCR
 {
+
     class FileCreators
     {
-        public static void CreateResultsFile(Dictionary<string, int> wordsMap, List<WordUnit> infoWords, string textName)
+        public static void CreateTargetAOIDetectionFile(
+            Dictionary<string, TargetShortPhrase> shortPhrases,
+            List<string> targetShortPhrasesRecognized,
+            Dictionary<string, List<string>> sentences,
+            List<string> targetSentencesRecognized,
+            string textName)
+        {
+            List<WordAOIDetection> wordsTable = new List<WordAOIDetection>();
+            List<PhraseAOIDetection> phrasesTable = new List<PhraseAOIDetection>();
+            List<OffTextDetection> offTextTable = new List<OffTextDetection>();
+
+            using (var wb = new ExcelPackage())
+            {
+                foreach (KeyValuePair<string, TargetShortPhrase> entry in shortPhrases)
+                {
+                    WordAOIDetection wd = new WordAOIDetection();
+                    var shortSentence = "";
+                    foreach (string single in entry.Value.Phrase)
+                    {
+                        shortSentence += single + " ";
+                    }
+                    wd.TargetWord = shortSentence;
+                    wd.AOIName = entry.Key;
+
+                    if (targetShortPhrasesRecognized.Contains(entry.Key))
+                    {
+                        wd.Detected = "V";
+                    }
+                    else
+                    {
+                        wd.Detected = "X";
+                    }
+
+                    wordsTable.Add(wd);
+                }
+                ExcelWorksheet wsWords = wb.Workbook.Worksheets.Add("Words");
+                wsWords.Cells[1,1].LoadFromCollectionFiltered(wordsTable);
+
+                string longSentence = "";
+                foreach (KeyValuePair<string, List<string>> entry in sentences)
+                {
+                    PhraseAOIDetection pd = new PhraseAOIDetection();
+                    longSentence = "";
+                    foreach (string single in entry.Value)
+                    {
+                        longSentence += single + " ";
+                    }
+                    pd.TargetPhrase = longSentence;
+                    pd.AOIName = entry.Key;
+                    if (targetSentencesRecognized.Contains(entry.Key))
+                    {
+                        pd.Detected = "V";
+                    }
+                    else
+                    {
+                        pd.Detected = "X";
+                    }
+                    phrasesTable.Add(pd);
+                }
+                ExcelWorksheet wsPhrases = wb.Workbook.Worksheets.Add("Phrases");
+                wsPhrases.Cells[1, 1].LoadFromCollectionFiltered(phrasesTable);
+
+                int sentenceIndex = 0;
+                foreach (List<string> entry in Form1.offTextSentenecs)
+                {
+                    OffTextDetection otd = new OffTextDetection();
+                    longSentence = "";
+                    foreach (string single in entry)
+                    {
+                        longSentence += single + " ";
+                    }
+                    otd.Sentence = longSentence;
+                    if (Form1.offTextRecognized.Contains(entry))
+                    {
+                        otd.Detected = "V";
+                    }
+                    else
+                    {
+                        otd.Detected = "X";
+                    }
+                    offTextTable.Add(otd);
+                    sentenceIndex++;
+                }
+                ExcelWorksheet wsOffText = wb.Workbook.Worksheets.Add("Off Text");
+                wsOffText.Cells[1, 1].LoadFromCollectionFiltered(offTextTable);
+
+                string path = @"\Target AOI detection.xlsx";
+
+                wb.SaveAs(new FileInfo(Form1.filesPath + path));
+
+
+            }
+        }
+            public static void CreateResultsFile(Dictionary<string, int> wordsMap, List<WordUnit> infoWords,
+            Dictionary<string, TargetShortPhrase> shortPhrases, 
+            List<string> targetShortPhrasesRecognized,
+            Dictionary<string, List<string>> sentences, 
+            List<string> targetSentencesRecognized,
+            string textName)
         {
             Excel.Application xlApp = new Microsoft.Office.Interop.Excel.Application();
 
             Excel.Workbook xlWorkBook;
-            Excel.Worksheet xlWorkSheet;
             Excel.Worksheet shortPhraseWorksheet;
             Excel.Worksheet longPhraseWorksheet;
             object misValue = System.Reflection.Missing.Value;
@@ -28,7 +130,7 @@ namespace Tesseract_OCR
             shortPhraseWorksheet.Cells[1, 3] = "Detected:";
             var index_row_words = 2;
             string shortSentence = "";
-            foreach (KeyValuePair<string, TargetShortPhrase> entry in Form1.targetShortPhrases)
+            foreach (KeyValuePair<string, TargetShortPhrase> entry in shortPhrases)
             {
                 shortSentence = "";
                 foreach (string single in entry.Value.Phrase)
@@ -38,7 +140,7 @@ namespace Tesseract_OCR
                 shortPhraseWorksheet.Cells[index_row_words, 1] = shortSentence;
                 shortPhraseWorksheet.Cells[index_row_words, 2] = entry.Key;
 
-                if (Form1.targetShortPhrasesRecognized.Contains(entry.Key))
+                if (targetShortPhrasesRecognized.Contains(entry.Key))
                 {
                     shortPhraseWorksheet.Cells[index_row_words, 3].Interior.Color = Excel.XlRgbColor.rgbLightGreen;
                 }
@@ -59,7 +161,7 @@ namespace Tesseract_OCR
             longPhraseWorksheet.Cells[1, 3] = "Detected:";
             var index_row_sen = 2;
             string longSentence = "";
-            foreach (KeyValuePair<string, List<string>> entry in Form1.targetSentences)
+            foreach (KeyValuePair<string, List<string>> entry in sentences)
             {
                 longSentence = "";
                 foreach (string single in entry.Value)
@@ -68,7 +170,7 @@ namespace Tesseract_OCR
                 }
                 longPhraseWorksheet.Cells[index_row_sen, 1] = longSentence;
                 longPhraseWorksheet.Cells[index_row_sen, 2] = entry.Key;
-                if (Form1.targetSentencesRecognized.Contains(entry.Key))
+                if (targetSentencesRecognized.Contains(entry.Key))
                 {
                     longPhraseWorksheet.Cells[index_row_sen, 3].Interior.Color = Excel.XlRgbColor.rgbLightGreen;
                 }
@@ -82,35 +184,13 @@ namespace Tesseract_OCR
             longPhraseWorksheet.Columns[2].ColumnWidth = 15;
 
 
-            xlWorkSheet = xlWorkBook.Sheets.Add(misValue, misValue, 1, misValue) as Excel.Worksheet;
-            xlWorkSheet.Name = "Results";
-
-            xlWorkSheet.Cells[1, 1] = "word";
-            xlWorkSheet.Cells[1, 2] = "frequency";
-            xlWorkSheet.Cells[1, 3] = "Length of word";
-
-            xlWorkSheet.Columns[2].ColumnWidth = 15;
-            xlWorkSheet.Columns[3].ColumnWidth = 15;
-
-            var index_row = 2;
-            foreach (WordUnit word in infoWords)
-            {
-                var len = word.Name.Length;
-                xlWorkSheet.Cells[index_row, 1] = word.Name;
-                xlWorkSheet.Cells[index_row, 2] = wordsMap[word.Name].ToString();
-                xlWorkSheet.Cells[index_row, 3] = len.ToString();
-                index_row++;
-            }
-            xlWorkSheet.Application.ActiveWindow.SplitColumn = 1;
-            xlWorkSheet.Application.ActiveWindow.SplitRow = 1;
-            xlWorkSheet.Application.ActiveWindow.FreezePanes = true;
 
             xlApp.DisplayAlerts = false;
-            System.IO.Directory.CreateDirectory(Environment.CurrentDirectory + @"\Output\Results");
-            string path = @"\Output\Results\results_" + textName + ".xls";
-
-            xlWorkBook.SaveAs(Environment.CurrentDirectory + path, Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
-            ExcelService.CloseSources(xlApp, xlWorkBook, new List<Excel.Worksheet>() { shortPhraseWorksheet, longPhraseWorksheet, xlWorkSheet });
+            System.IO.Directory.CreateDirectory(Form1.filesPath + @"\Results");
+            
+            string path = @"\Results\results_" + textName + ".xls";
+            xlWorkBook.SaveAs(Form1.filesPath + path, Excel.XlFileFormat.xlWorkbookNormal, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+            ExcelService.CloseSources(xlApp, xlWorkBook, new List<Excel.Worksheet>() { shortPhraseWorksheet, longPhraseWorksheet });
 
 
         }
@@ -127,16 +207,83 @@ namespace Tesseract_OCR
 
             pb.Build(xlWorkSheet);
             xlApp.DisplayAlerts = false;
-            System.IO.Directory.CreateDirectory(Environment.CurrentDirectory + @"\Output\Padding");
-            string path = @"\Output\Padding\AOI_boundaries-" + file_name + ".xlsx";
-            xlWorkBook.SaveAs(Environment.CurrentDirectory + path, Microsoft.Office.Interop.Excel.XlFileFormat.xlOpenXMLWorkbook, misValue, misValue, misValue, misValue, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+            System.IO.Directory.CreateDirectory(Form1.filesPath + @"\AOI boundaries");
+            string path = @"\AOI boundaries\AOI_boundaries-" + file_name + ".xlsx";
+            xlWorkBook.SaveAs(Form1.filesPath + path, Microsoft.Office.Interop.Excel.XlFileFormat.xlOpenXMLWorkbook, misValue, misValue, misValue, misValue, Microsoft.Office.Interop.Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
 
             ExcelService.CloseSources(xlApp, xlWorkBook, new List<Excel.Worksheet>() { xlWorkSheet });
 
         }
+        public static void CreateBounderiesPhraseFile(List<AOI> aois, string textName)
+        {
+            List<PhraseBoundaries> phraseTable = new List<PhraseBoundaries>();
+            using (var wb = new ExcelPackage())
+            {
+                foreach (AOI block in aois)
+                {
+                    PhraseBoundaries pb = new PhraseBoundaries();
+                    pb.Stimulus = textName;
+                    pb.Name = block.Name;
+                    pb.Group = block.Group;
+                    pb.X = block.X1 + block.Width / 2;
+                    pb.Y = block.Y1 + block.Height / 2;
+                    pb.H = block.Height;
+                    pb.W = block.Width;
+                    if (block.IsTarget)
+                        pb.TargetName = block.TargetName;
+                    phraseTable.Add(pb);
+                }
+                ExcelWorksheet ws = wb.Workbook.Worksheets.Add("Sheet 1");
 
+                ws.Cells[1, 1].LoadFromCollectionFiltered(phraseTable);
+                string dirPath = Form1.filesPath + @"\AOI boundaries";
+                if (!Directory.Exists(dirPath))
+                    Directory.CreateDirectory(Form1.filesPath + @"\AOI boundaries");
 
+                string fileName = @"\AOI_boundaries-" + textName + "_c.xlsx";
+                wb.SaveAs(new FileInfo(dirPath + fileName));
 
+            }
+        }
+        public static void CreateBounderiesWordsFile(List<WordUnit> words, string textName, bool frequencyWords, Dictionary<string, int> wordsMap)
+        {
+            // added license of the package, watch: https://epplussoftware.com/developers/licenseexception
+            ExcelPackage.LicenseContext = LicenseContext.Commercial;
 
+            List<WordBoundaries> wordsTable = new List<WordBoundaries>();
+            using (var wb = new ExcelPackage())
+            {
+                foreach (WordUnit word in words)
+                {
+                    WordBoundaries wordBoundaries = new WordBoundaries();
+                    wordBoundaries.Stimulus = textName;
+                    wordBoundaries.Index = word.WordIndex;
+                    wordBoundaries.Word = word.Name;
+                    wordBoundaries.X = word.X1 + word.Width / 2;
+                    wordBoundaries.Y = word.Y1 + word.Height / 2;
+                    wordBoundaries.H = word.Height;
+                    wordBoundaries.W = word.Width;
+                    if (word.IsTarget)
+                        wordBoundaries.TargetName = word.TargetName;
+                    wordBoundaries.LengthWord = word.Name.Length;
+                    if (frequencyWords)
+                        wordBoundaries.Frequency = wordsMap[word.Name];
+
+                    wordsTable.Add(wordBoundaries);
+                }
+                ExcelWorksheet ws = wb.Workbook.Worksheets.Add("Sheet 1");
+
+                ws.Cells[1, 1].LoadFromCollectionFiltered(wordsTable);
+                if (!frequencyWords)
+                    ws.DeleteColumn(10);
+                string dirPath = Form1.filesPath + @"\AOI boundaries";
+                if (!Directory.Exists(dirPath))
+                    Directory.CreateDirectory(Form1.filesPath + @"\AOI boundaries");
+
+                string fileName = @"\AOI_boundaries-" + textName + "_w.xlsx";
+                wb.SaveAs(new FileInfo(dirPath + fileName));
+
+            }
+        }
     }
 }

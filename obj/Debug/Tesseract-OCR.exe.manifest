@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="EPPlus.dll" size="2568192">
-      <assemblyIdentity name="EPPlus" version="5.6.1.0" publicKeyToken="EA159FDAA78159A1" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="EPPlus.dll" size="2640896">
+      <assemblyIdentity name="EPPlus" version="5.7.1.0" publicKeyToken="EA159FDAA78159A1" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>8trP+xbd4PAXvdBhFiWw2Ed/DU9Op9iZxJSgjcdHSvY=</dsig:DigestValue>
+        <dsig:DigestValue>EEC+4ArmaUb9wyt5WnpQAvf0r6OeOmgZg/gZbnwYIq4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
@@ -90,36 +90,156 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Tesseract.dll" size="131584">
-      <assemblyIdentity name="Tesseract" version="4.1.1.0" language="neutral" processorArchitecture="msil" />
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Tesseract.dll" size="114688">
+      <assemblyIdentity name="Tesseract" version="3.0.2.0" publicKeyToken="EBEB3D86BEF60CBE" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>aZ8GUHgRbRT2rAj9vIPhLu3JnS55YDDmLEtawGECteU=</dsig:DigestValue>
+        <dsig:DigestValue>0o4UWNsgA9/y94abpxEwtJfOTST8cOoJPH5H/VGMNh8=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Tesseract-OCR.exe" size="78848">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Tesseract-OCR.exe" size="74752">
       <assemblyIdentity name="Tesseract-OCR" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>5IsQY65N0grXTxgK2Ahc9OMdPfJHBY/WAvbk/eeSkJw=</dsig:DigestValue>
+        <dsig:DigestValue>Cr8D1nIlhb52L8XakMfBkgkfIcktly08kdqTed0RZ58=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
-  <file name="Tesseract-OCR.exe.config" size="928">
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="tessnet2_32.dll" size="1455104">
+      <assemblyIdentity name="tessnet2_32" version="2.0.4.0" publicKeyToken="1550524B5BA07E29" language="neutral" processorArchitecture="x86" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>nEZAx+dDvUXIQFO3ptqm1Wiovg+AypMc4FgfYPozbco=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="Content\tessdata\eng.DangAmbigs" size="392">
     <hash>
       <dsig:Transforms>
         <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
       </dsig:Transforms>
       <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-      <dsig:DigestValue>+y7hlJdrDNJwC/NTqgeb+4uIbtsVSSW+uIZ6CeIXVWQ=</dsig:DigestValue>
+      <dsig:DigestValue>shFO5zQTGmx/hjZYIHCzHZ5fR0f3xiOOFxKIUgav85w=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\tessdata\eng.freq-dawg" size="672">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>HQglOr9IJAKn5oOkJ0+Gkps1K37dXE9G2eSXnq0S8P8=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\tessdata\eng.inttemp" size="862544">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>cZjh3G0eoKAbo62WekJoOHZT+5AVzTuQSCbsigFQJnI=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\tessdata\eng.normproto" size="39862">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>iQGq66+29gqQ6T69rKCxaTGCDoGM5PwatHmGaL67UFo=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\tessdata\eng.pffmtable" size="590">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>OfbEV0vwZZPlts7RFW62zVHJuvr9ksFLos9eQT7PBCw=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\tessdata\eng.unicharset" size="480">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>4cpAc6WnSgTnJmcdsOfZndN8PpELYr4nBUyrlj7hllA=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\tessdata\eng.user-words" size="7289">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>iOzMxi/WGi4vGV8UREnq4AcZ0IUPoKxOBlKwaaxB1iI=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Content\tessdata\eng.word-dawg" size="809728">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>03qPHtoNZXIa26GybYUdcP71CsPIUOgEMP1yD0TKN8c=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="Tesseract-OCR.exe.config" size="1218">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ydw1Crfakg5FXCrl1j2bc10oWXBjKlTD934r08fKD4Q=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="x64\liblept172.dll" size="3207680">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>r+4T7ebN0inyk9TiNxRCyqFIyRHSmqmirtxLtZNHC40=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="x64\libtesseract304.dll" size="2743808">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>vLIZBCWg8RXRbqRKCAOiJG72a+T0ApHGV6omx05TCvQ=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="x86\liblept172.dll" size="2459648">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>FgQjGZA9ktMYCx0cgiMPfTty1erM/K5qlxovBirPY8s=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="x86\libtesseract304.dll" size="2138624">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>qFsDhj5LJ1WDm6TV1w1hubI8nMOyPxMzOYoN1Bjr1+c=</dsig:DigestValue>
     </hash>
   </file>
 </asmv1:assembly>

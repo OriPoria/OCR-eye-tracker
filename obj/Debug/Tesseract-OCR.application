@@ -7,14 +7,14 @@
     <framework targetVersion="4.5" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="Tesseract-OCR.exe.manifest" size="6882">
+    <dependentAssembly dependencyType="install" codebase="Tesseract-OCR.exe.manifest" size="12464">
       <assemblyIdentity name="Tesseract-OCR.exe" version="1.0.0.5" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>6cRcDBk/+pnm8f56vY2B4ByFUQ1xNqfGhqxTxJdte1w=</dsig:DigestValue>
+        <dsig:DigestValue>KdVexEH9Q/wNDL/l1u8c1j4oHMqvyVpPLa9M3vxnWXM=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

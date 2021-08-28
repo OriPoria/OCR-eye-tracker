@@ -3,7 +3,7 @@ using Microsoft.Office.Interop.Excel;
 
 namespace Tesseract_OCR
 {
-    public class PhrasesPaddingBuilder   : PaddingBuilder
+    public class PhrasesPaddingBuilder : PaddingBuilder
     {
         private List<AOI> infoAoi;
         private string textName;
@@ -49,8 +49,7 @@ namespace Tesseract_OCR
             }
             xlWorkSheet.Application.ActiveWindow.SplitColumn = 1;
             xlWorkSheet.Application.ActiveWindow.SplitRow = 1;
-            xlWorkSheet.Application.ActiveWindow.FreezePanes = true;
-
+            xlWorkSheet.Application.ActiveWindow.FreezePanes = false;
         }
 
 

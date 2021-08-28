@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using System.Windows.Forms;
 using System.Data;
-using System.Data.OleDb;
+using OfficeOpenXml.Attributes;
+using OfficeOpenXml.Table;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.IO;
 using OfficeOpenXml;
 using Excel = Microsoft.Office.Interop.Excel;
-using System.Runtime.InteropServices;
 
 namespace Tesseract_OCR.Services
 {
     public class ExcelService
     {
-        string excelFilePath;
+        public string ExcelFilePath { get; set; }
         public ExcelService()
         {
             using (OpenFileDialog openFileDialog = new OpenFileDialog
@@ -31,7 +32,7 @@ namespace Tesseract_OCR.Services
 
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    excelFilePath = openFileDialog.FileName;
+                    ExcelFilePath = openFileDialog.FileName;
                 }
                 else
                 {
@@ -43,13 +44,13 @@ namespace Tesseract_OCR.Services
         // The same function from EM Analyzer, excel service
         public List<IEnumerable<T>> ReadExcelFile<T>()
         {
+            // added license of the package, watch: https://epplussoftware.com/developers/licenseexception
+            ExcelPackage.LicenseContext = LicenseContext.Commercial;
+
             List<IEnumerable<T>> table = new List<IEnumerable<T>>();
             try
             {
-                // added license of the package, watch: https://epplussoftware.com/developers/licenseexception
-                 ExcelPackage.LicenseContext = LicenseContext.Commercial;
-
-                using (var wb = new ExcelPackage(new FileInfo(excelFilePath)))
+                using (var wb = new ExcelPackage(new FileInfo(ExcelFilePath)))
                 {
 
                     ExcelWorksheet ws = wb.Workbook.Worksheets.First();
@@ -88,5 +89,20 @@ namespace Tesseract_OCR.Services
             Marshal.FinalReleaseComObject(xlApp);
         }
 
+    }
+    public static class Extensions
+    {
+        public static ExcelRangeBase LoadFromCollectionFiltered<T>(this ExcelRangeBase @this, IEnumerable<T> collection)//, bool PrintHeaders, TableStyles styles) where T : class
+        {
+            MemberInfo[] membersToInclude = typeof(T)
+                .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+                .Where(p => !Attribute.IsDefined(p, typeof(EpplusIgnore)))
+                .ToArray();
+
+            return @this.LoadFromCollection(collection, true,
+                TableStyles.None,
+                BindingFlags.Instance | BindingFlags.Public,
+                membersToInclude);
+        }
     }
 }

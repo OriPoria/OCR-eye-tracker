@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 
 namespace Tesseract_OCR
 {
@@ -32,9 +33,7 @@ namespace Tesseract_OCR
         {
             this.start_btn = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.button1 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
-            this.separate_xml_cb = new System.Windows.Forms.CheckBox();
             this.RLinch = new System.Windows.Forms.TextBox();
             this.pad_rl_lbl = new System.Windows.Forms.Label();
             this.inch_rl_lbl = new System.Windows.Forms.Label();
@@ -56,7 +55,7 @@ namespace Tesseract_OCR
             // 
             this.start_btn.BackColor = System.Drawing.SystemColors.MenuHighlight;
             this.start_btn.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.start_btn.Location = new System.Drawing.Point(25, 592);
+            this.start_btn.Location = new System.Drawing.Point(32, 481);
             this.start_btn.Margin = new System.Windows.Forms.Padding(4);
             this.start_btn.Name = "start_btn";
             this.start_btn.Size = new System.Drawing.Size(326, 48);
@@ -69,53 +68,29 @@ namespace Tesseract_OCR
             // 
             this.openFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog_FileOk);
             // 
-            // button1
-            // 
-            this.button1.Enabled = false;
-            this.button1.Location = new System.Drawing.Point(61, 280);
-            this.button1.Margin = new System.Windows.Forms.Padding(4);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(264, 48);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Insert figurative/literal words";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(61, 335);
+            this.button3.Location = new System.Drawing.Point(61, 267);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(264, 43);
             this.button3.TabIndex = 4;
-            this.button3.Text = "Insert sentences, titles or words";
+            this.button3.Text = "Upload excel file";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // separate_xml_cb
-            // 
-            this.separate_xml_cb.AutoSize = true;
-            this.separate_xml_cb.Checked = true;
-            this.separate_xml_cb.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.separate_xml_cb.Location = new System.Drawing.Point(64, 510);
-            this.separate_xml_cb.Name = "separate_xml_cb";
-            this.separate_xml_cb.Size = new System.Drawing.Size(218, 24);
-            this.separate_xml_cb.TabIndex = 6;
-            this.separate_xml_cb.Text = "Create separate xml files";
-            this.separate_xml_cb.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.uploadExcel_Click);
             // 
             // RLinch
             // 
-            this.RLinch.Location = new System.Drawing.Point(213, 415);
+            this.RLinch.Location = new System.Drawing.Point(220, 335);
             this.RLinch.Name = "RLinch";
             this.RLinch.Size = new System.Drawing.Size(48, 26);
             this.RLinch.TabIndex = 7;
-            this.RLinch.Text = "15";
+            this.RLinch.Text = "40";
             this.RLinch.TextChanged += new System.EventHandler(this.LRinch_Click);
             // 
             // pad_rl_lbl
             // 
             this.pad_rl_lbl.AutoSize = true;
-            this.pad_rl_lbl.Location = new System.Drawing.Point(21, 415);
+            this.pad_rl_lbl.Location = new System.Drawing.Point(28, 335);
             this.pad_rl_lbl.Name = "pad_rl_lbl";
             this.pad_rl_lbl.Size = new System.Drawing.Size(175, 20);
             this.pad_rl_lbl.TabIndex = 8;
@@ -125,7 +100,7 @@ namespace Tesseract_OCR
             // inch_rl_lbl
             // 
             this.inch_rl_lbl.AutoSize = true;
-            this.inch_rl_lbl.Location = new System.Drawing.Point(267, 415);
+            this.inch_rl_lbl.Location = new System.Drawing.Point(274, 335);
             this.inch_rl_lbl.Name = "inch_rl_lbl";
             this.inch_rl_lbl.Size = new System.Drawing.Size(40, 20);
             this.inch_rl_lbl.TabIndex = 9;
@@ -134,7 +109,7 @@ namespace Tesseract_OCR
             // pad_ud_lbl
             // 
             this.pad_ud_lbl.AutoSize = true;
-            this.pad_ud_lbl.Location = new System.Drawing.Point(21, 445);
+            this.pad_ud_lbl.Location = new System.Drawing.Point(28, 365);
             this.pad_ud_lbl.Name = "pad_ud_lbl";
             this.pad_ud_lbl.Size = new System.Drawing.Size(176, 20);
             this.pad_ud_lbl.TabIndex = 10;
@@ -143,7 +118,7 @@ namespace Tesseract_OCR
             // minimum_phase_lbl
             // 
             this.minimum_phase_lbl.AutoSize = true;
-            this.minimum_phase_lbl.Location = new System.Drawing.Point(21, 475);
+            this.minimum_phase_lbl.Location = new System.Drawing.Point(28, 395);
             this.minimum_phase_lbl.Name = "minimum_phase_lbl";
             this.minimum_phase_lbl.Size = new System.Drawing.Size(188, 20);
             this.minimum_phase_lbl.TabIndex = 10;
@@ -151,25 +126,26 @@ namespace Tesseract_OCR
             // 
             // UDinch
             // 
-            this.UDinch.Location = new System.Drawing.Point(213, 445);
+            this.UDinch.Location = new System.Drawing.Point(220, 365);
             this.UDinch.Name = "UDinch";
             this.UDinch.Size = new System.Drawing.Size(48, 26);
             this.UDinch.TabIndex = 11;
-            this.UDinch.Text = "26";
+            this.UDinch.Text = "50";
             this.UDinch.TextChanged += new System.EventHandler(this.UDinch_Click);
             // 
             // mini_phase
             // 
-            this.mini_phase.Location = new System.Drawing.Point(213, 475);
+            this.mini_phase.Location = new System.Drawing.Point(220, 395);
             this.mini_phase.Name = "mini_phase";
             this.mini_phase.Size = new System.Drawing.Size(48, 26);
             this.mini_phase.TabIndex = 11;
+            this.mini_phase.Text = "3";
             this.mini_phase.TextChanged += new System.EventHandler(this.mini_phase_Click);
             // 
             // inch_ud_lbl
             // 
             this.inch_ud_lbl.AutoSize = true;
-            this.inch_ud_lbl.Location = new System.Drawing.Point(267, 445);
+            this.inch_ud_lbl.Location = new System.Drawing.Point(274, 365);
             this.inch_ud_lbl.Name = "inch_ud_lbl";
             this.inch_ud_lbl.Size = new System.Drawing.Size(40, 20);
             this.inch_ud_lbl.TabIndex = 12;
@@ -188,11 +164,12 @@ namespace Tesseract_OCR
             // status_lbl
             // 
             this.status_lbl.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.status_lbl.Location = new System.Drawing.Point(148, 648);
+            this.status_lbl.Location = new System.Drawing.Point(32, 537);
             this.status_lbl.Margin = new System.Windows.Forms.Padding(4);
             this.status_lbl.Name = "status_lbl";
-            this.status_lbl.Size = new System.Drawing.Size(81, 35);
+            this.status_lbl.Size = new System.Drawing.Size(326, 35);
             this.status_lbl.TabIndex = 1;
+            this.status_lbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // upload_imges_btn
             // 
@@ -208,7 +185,7 @@ namespace Tesseract_OCR
             // words_freq_cb
             // 
             this.words_freq_cb.AutoSize = true;
-            this.words_freq_cb.Location = new System.Drawing.Point(64, 541);
+            this.words_freq_cb.Location = new System.Drawing.Point(65, 436);
             this.words_freq_cb.Name = "words_freq_cb";
             this.words_freq_cb.Size = new System.Drawing.Size(229, 24);
             this.words_freq_cb.TabIndex = 16;
@@ -222,7 +199,7 @@ namespace Tesseract_OCR
             this.upload_word_btn.Name = "upload_word_btn";
             this.upload_word_btn.Size = new System.Drawing.Size(264, 50);
             this.upload_word_btn.TabIndex = 15;
-            this.upload_word_btn.Text = "Upload Word file";
+            this.upload_word_btn.Text = "Upload word file";
             this.upload_word_btn.UseVisualStyleBackColor = false;
             this.upload_word_btn.Click += new System.EventHandler(this.upload_word_btn_Click);
             // 
@@ -250,7 +227,7 @@ namespace Tesseract_OCR
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.ClientSize = new System.Drawing.Size(389, 696);
+            this.ClientSize = new System.Drawing.Size(389, 596);
             this.Controls.Add(this.text_name_tb);
             this.Controls.Add(this.inch_ud_lbl);
             this.Controls.Add(this.UDinch);
@@ -260,9 +237,7 @@ namespace Tesseract_OCR
             this.Controls.Add(this.inch_rl_lbl);
             this.Controls.Add(this.pad_rl_lbl);
             this.Controls.Add(this.RLinch);
-            this.Controls.Add(this.separate_xml_cb);
             this.Controls.Add(this.button3);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.status_lbl);
             this.Controls.Add(this.start_btn);
             this.Controls.Add(this.upload_imges_btn);
@@ -286,7 +261,6 @@ namespace Tesseract_OCR
 
         private System.Windows.Forms.Button start_btn;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button upload_imges_btn;
         private System.Windows.Forms.Button upload_word_btn;

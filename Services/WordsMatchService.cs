@@ -21,13 +21,13 @@ namespace Tesseract_OCR.Services
         }
         public string MatchWords(string ocrWord, int index)
         {
-            correctWord = ocrWord;
-            wordListPointer = index;
-            string listWord = index < wordsList.Length ? wordsList[index] : "";
-            if (listWord == "בסריקות")
+            if (index == 130)
             {
                 var x = 3;
             }
+            correctWord = ocrWord;
+            wordListPointer = index;
+            string listWord = index < wordsList.Length ? wordsList[index] : "";
             if (listWord != ocrWord)
             {
                 if (AreSimilar(ocrWord, listWord))
@@ -98,6 +98,14 @@ namespace Tesseract_OCR.Services
                     string newLonger = longerString.Substring(i, shorterString.Length);
                     similarCharCounter = newLonger.Length - StringService.HammingDist(shorterString, newLonger);
                     if (similarCharCounter / newLonger.Length >= 0.55)
+                        return true;
+                }
+
+                if (shorterString.Length > 3)
+                {
+                    if (shorterString[0] == longerString[0] && shorterString[1] == longerString[1]
+                        && shorterString[shorterString.Length - 1] == longerString[longerString.Length - 1]
+                        && shorterString[shorterString.Length - 2] == longerString[longerString.Length - 2])
                         return true;
                 }
             }
