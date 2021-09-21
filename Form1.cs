@@ -32,7 +32,7 @@ namespace Tesseract_OCR
         public static List<List<string>> offTextRecognized = new List<List<string>>();
 
         Dictionary<int, List<WordUnit>> infoWordsByPage = new Dictionary<int, List<WordUnit>>();
-        Dictionary<string, AOI> AOIdic = new Dictionary<string, AOI>();
+        Dictionary<int,Dictionary<string, AOI>> AOIdic = new Dictionary<int, Dictionary<string, AOI>>();
 
 
         public string[] imagesPaths;
@@ -417,7 +417,7 @@ namespace Tesseract_OCR
             }
             for (int indexPage = 1; indexPage <= imgs.Length; indexPage++)
             {
-
+                string stimulus = $"{imageName}_p{indexPage}";
                 FileCreators.CreateBounderiesWordsFile(infoWordsByPage[indexPage], stimulus, words_freq_cb.Checked, wordsMap);
             }
 
@@ -472,10 +472,8 @@ namespace Tesseract_OCR
             }
 
             status_lbl.Text = $"{indexPage} " + "out of " + $"{imgs.Length}";
-            ClearData();
             //in order to test the first page:
             //break;
-            */
             FileCreators.CreateBounderiesPhraseFile(AOIdic.Values.ToList(), imageName);
             //FileCreators.CreateBounderiesWordsFile(infoWordsByPage., imageName, words_freq_cb.Checked, wordsMap);
 

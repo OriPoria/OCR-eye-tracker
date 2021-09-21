@@ -1,12 +1,18 @@
 ﻿
 namespace Tesseract_OCR
 {
-    public class WordUnit : BlockInfo
+    public class WordUnit
     {
         public bool EndWithPunctuation = false;
         public bool EndOfSentence = false;
         public int WordIndex;
-
+        public string Name { get; set; }
+        public int X1 { get; set; }
+        public int Y1 { get; set; }
+        public int X2 { get; set; }
+        public int Y2 { get; set; }
+        public int Height { get; set; }
+        public int Width { get; set; }
         public WordUnit(string n, int x1, int y1, int x2, int y2, int h, int w)
         {
             // Name is the string of the word, for indexing there is WordIndex
