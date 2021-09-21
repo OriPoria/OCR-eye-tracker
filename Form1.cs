@@ -31,10 +31,11 @@ namespace Tesseract_OCR
         public static List<List<string>> offTextSentenecs = new List<List<string>>();
         public static List<List<string>> offTextRecognized = new List<List<string>>();
 
-        List<WordUnit> infoWords = new List<WordUnit>();
+        Dictionary<int, List<WordUnit>> infoWordsByPage = new Dictionary<int, List<WordUnit>>();
         Dictionary<string, AOI> AOIdic = new Dictionary<string, AOI>();
-        
 
+
+        public string[] imagesPaths;
         public Bitmap[] imgs;
         public string path = "";
         private TextFile textFile = new TextFile();
@@ -45,7 +46,6 @@ namespace Tesseract_OCR
         string imageName;
 
         public static string filesPath = Environment.CurrentDirectory;
-        // cancel s as input
         public Form1()
         {
             InitializeComponent();
@@ -122,6 +122,7 @@ namespace Tesseract_OCR
         {
             using (var fbd = new FolderBrowserDialog())
             {
+
                 fbd.SelectedPath = Properties.Settings.Default.Folder_Path;
                 
                 
@@ -134,34 +135,48 @@ namespace Tesseract_OCR
                     Properties.Settings.Default.Folder_Path = fbd.SelectedPath;
                     filesPath = System.IO.Directory.GetParent(fbd.SelectedPath).FullName +
                         $@"\{Path.GetFileNameWithoutExtension(fbd.SelectedPath)} outputs";
-
-                    string[] filePaths = Directory.GetFiles(fbd.SelectedPath);
-                    Bitmap[] bitmaps = new Bitmap[filePaths.Length];
-                    // System.Drawing.Size size = new System.Drawing.Size(1398, 1082);
-                    this.text_name_tb.Text = Path.GetFileName(fbd.SelectedPath);
-                    var i = 0;
-                    foreach (var path in filePaths)
-                    {
-                        try
-                        {
-                            using (var bmp = (Bitmap)Image.FromFile(path))
-                            {
-                                bitmaps[i] = ImageService.ResizeImage(bmp, 1398, 1082);
-                                bitmaps[i].Save($"image{i + 1}.png");
-                                i += 1;
-                            }
-
-                        }
-                        catch (Exception)
-                        {
-                            MessageBox.Show("Images uploading failed");
-                            return;
-                        }
-                    }
-                    textFile.TextImages = bitmaps;
-                    imgs = bitmaps;
+                    imagesPaths = Directory.GetFiles(fbd.SelectedPath);
+                    text_name_tb.Text = Path.GetFileName(fbd.SelectedPath);
                 }
             }
+        }
+        private int ResizingImages()
+        {
+            int width = 0;
+            int height = 0;
+            var resolutionItem = resolutions_lb.SelectedItem;
+            if (resolutionItem == null)
+            {
+                MessageBox.Show("Image resolution is not selected");
+                return -1;
+            }
+
+            string[] resToks = resolutionItem.ToString().Split('X');
+            width = int.Parse(resToks[0]);
+            height = int.Parse(resToks[1]);
+            Bitmap[] bitmaps = new Bitmap[imagesPaths.Length];
+            var i = 0;
+            foreach (var path in imagesPaths)
+            {
+                try
+                {
+                    using (var bmp = (Bitmap)Image.FromFile(path))
+                    {
+                        bitmaps[i] = ImageService.ResizeImage(bmp, width, height);
+                        bitmaps[i].Save($"image{i + 1}.png");
+                        i += 1;
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Images uploading failed");
+                    return -1;
+                }
+            }
+            textFile.TextImages = bitmaps;
+            imgs = bitmaps;
+            return 0;
+                    
         }
         private void upload_word_btn_Click(object sender, EventArgs e)
         {
@@ -187,20 +202,26 @@ namespace Tesseract_OCR
         {
             status_lbl.Text = "Loading...";
             this.Refresh();
-            if (imgs == null)
+            if (imagesPaths == null)
             {
                 MessageBox.Show("You must upload images");
                 status_lbl.Text = "";
                 return;
             }
+            // if ResizingImages not executed successfully
+            int resizingImagesStatus = ResizingImages();
+            if (resizingImagesStatus != 0)
+            {
+                status_lbl.Text = "";
+                return;
+            }
+
             var ocr = new TesseractEngine(path, "heb", EngineMode.Default);
             Tesseract.PageIteratorLevel myLevel = PageIteratorLevel.Word;
 
 
             // dictionary for the frequncies and temporary for shorst phrase recognition 
             Dictionary<string, int> wordsMap = new Dictionary<string, int>();
-            List<AOI> aoiPhraseBounderies = new List<AOI>();
-            List<WordUnit> aoiWordBounderies = new List<WordUnit>();
 
             int aoiNumber = 1;
             int aoiGroup = 1;
@@ -208,13 +229,14 @@ namespace Tesseract_OCR
 
             for (int indexPage = 1; indexPage <= imgs.Length; indexPage++)
             {
+                List<WordUnit> infoWords = new List<WordUnit>();
+
                 using (var page = ocr.Process(imgs[indexPage - 1]))
                 {
                     var wordsIndex = 0;
                     WordsMatchService wordsMatcher = null;
                     if (wordsFromFile != null && indexPage <= wordsFromFile.Length)
                         wordsMatcher = new WordsMatchService(wordsFromFile[indexPage - 1].Split(' '));
-                    string stimulus = $"{imageName}_p{indexPage}";
                     using (var iter = page.GetIterator())
                     {
                         iter.Begin();
@@ -231,7 +253,7 @@ namespace Tesseract_OCR
                                 }
 
                                 var wordUnitName = StringService.RemovePunctuation(curText);
-                                
+
                                 WordUnit wordUnit = new WordUnit(wordUnitName, rect.X1, rect.Y1, rect.X2, rect.Y2, rect.Height, rect.Width);
                                 wordUnit.SetEndSign(curText);
 
@@ -298,7 +320,7 @@ namespace Tesseract_OCR
                                 limits.Add(lowerBound);
                                 break;
                             }
-                            if (AreSameLine(infoWords[f], infoWords[f+1])) // same line
+                            if (AreSameLine(infoWords[f], infoWords[f + 1])) // same line
                             {
                                 if (infoWords[f].Y1 < upperBound)
                                 {
@@ -352,7 +374,7 @@ namespace Tesseract_OCR
                         var last_line = 0;
                         for (int i = 0; i <= infoWords.Count - 1; i++)
                         {
-                            if ((i != infoWords.Count - 1) && AreSameLine(infoWords[i], infoWords[i+1]))
+                            if ((i != infoWords.Count - 1) && AreSameLine(infoWords[i], infoWords[i + 1]))
                             {
 
                                 var diff = infoWords[i].X1 - infoWords[i + 1].X2;
@@ -389,72 +411,73 @@ namespace Tesseract_OCR
                         }
                         if (words_freq_cb.Checked)
                             frequencyWordThread.Join();
-                        
-                        FileCreators.CreateBounderiesWordsFile(infoWords, stimulus, words_freq_cb.Checked, wordsMap);
-                        foreach (var aoi in infoWords)
-                        {
-                            aoiWordBounderies.Add(aoi);
-                        }
-
-                        AoiAlgorithm(ref aoiNumber, ref aoiGroup);
-
-                        FileCreators.CreateBounderiesPhraseFile(new List<AOI>(AOIdic.Values), stimulus);
-                        foreach (var aoi in AOIdic.Values)
-                        {
-                            aoiPhraseBounderies.Add(aoi);
-                        }
-
-
-                        System.IO.Directory.CreateDirectory(filesPath + @"\AOI templates");
-                        string path = @"\AOI templates\" + this.imageName + $"_p{indexPage}" + "_w.xml";
-                        using (StreamWriter xmlFile = new StreamWriter(filesPath + path, false, Encoding.UTF8))
-                        {
-                            var id_aoi = 1;
-                            xmlFile.WriteLine("<?xml version=\"1.0\"?>");
-                            xmlFile.WriteLine("<ArrayOfDynamicAOI xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">");
-                            foreach (WordUnit word in infoWords)
-                            {
-                                var x1_value = word.X1;
-                                var y1_value = word.Y1;
-                                var x2_value = word.X2;
-                                var y2_value = word.Y2;
-                                CreateDynamicAoiXml(id_aoi, x1_value, y1_value, x2_value, y2_value, xmlFile, word.WordIndex.ToString(),
-                                    word.WordIndex.ToString(), Constants.NO_SENTENCE, false);
-                                id_aoi += 1;
-                            }
-                            xmlFile.WriteLine("</ArrayOfDynamicAOI>");
-                            xmlFile.Close();
-                        }
-
-                        string pathTarget = @"\AOI templates\" + this.imageName + $"_p{indexPage}" + "_c.xml";
-                        using (StreamWriter xmlFile = new StreamWriter(filesPath + pathTarget, false, Encoding.UTF8))
-                        {
-                            var id_aoi = 1;
-                            xmlFile.WriteLine("<?xml version=\"1.0\"?>");
-                            xmlFile.WriteLine("<ArrayOfDynamicAOI xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">");
-                            foreach (string key in AOIdic.Keys)
-                            {
-                                var x1_value = AOIdic[key].X1;
-                                var y1_value = AOIdic[key].Y1;
-                                var x2_value = AOIdic[key].X2;
-                                var y2_value = AOIdic[key].Y2;
-                                CreateDynamicAoiXml(id_aoi, x1_value, y1_value, x2_value, y2_value, xmlFile, key,
-                                    AOIdic[key].Group, Constants.SENTENCE, AOIdic[key].IsTarget);
-                                id_aoi++;
-                            }
-                            xmlFile.WriteLine("</ArrayOfDynamicAOI>");
-                            xmlFile.Close();
-                        }
-
-                        status_lbl.Text = $"{indexPage} " + "out of " + $"{imgs.Length}";
-                        ClearData();
-                        //in order to test the first page:
-                        //break;
                     }
                 }
+                infoWordsByPage[indexPage] = infoWords;
             }
-            FileCreators.CreateBounderiesPhraseFile(aoiPhraseBounderies, imageName);
-            FileCreators.CreateBounderiesWordsFile(aoiWordBounderies, imageName, words_freq_cb.Checked, wordsMap);
+            for (int indexPage = 1; indexPage <= imgs.Length; indexPage++)
+            {
+
+                FileCreators.CreateBounderiesWordsFile(infoWordsByPage[indexPage], stimulus, words_freq_cb.Checked, wordsMap);
+            }
+
+            AoiAlgorithm(ref aoiNumber, ref aoiGroup);
+
+            FileCreators.CreateBounderiesPhraseFile(new List<AOI>(AOIdic.Values), stimulus);
+            foreach (var aoi in AOIdic.Values)
+            {
+                aoiPhraseBounderies.Add(aoi);
+            }
+
+
+            System.IO.Directory.CreateDirectory(filesPath + @"\AOI templates");
+            string path = @"\AOI templates\" + this.imageName + $"_page{indexPage}" + "_w.xml";
+            using (StreamWriter xmlFile = new StreamWriter(filesPath + path, false, Encoding.UTF8))
+            {
+                var id_aoi = 1;
+                xmlFile.WriteLine("<?xml version=\"1.0\"?>");
+                xmlFile.WriteLine("<ArrayOfDynamicAOI xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">");
+                foreach (WordUnit word in infoWords)
+                {
+                    var x1_value = word.X1;
+                    var y1_value = word.Y1;
+                    var x2_value = word.X2;
+                    var y2_value = word.Y2;
+                    CreateDynamicAoiXml(id_aoi, x1_value, y1_value, x2_value, y2_value, xmlFile, word.WordIndex.ToString(),
+                        word.WordIndex.ToString(), Constants.NO_SENTENCE, false);
+                    id_aoi += 1;
+                }
+                xmlFile.WriteLine("</ArrayOfDynamicAOI>");
+                xmlFile.Close();
+            }
+
+            string pathTarget = @"\AOI templates\" + this.imageName + $"_page{indexPage}" + "_c.xml";
+            using (StreamWriter xmlFile = new StreamWriter(filesPath + pathTarget, false, Encoding.UTF8))
+            {
+                var id_aoi = 1;
+                xmlFile.WriteLine("<?xml version=\"1.0\"?>");
+                xmlFile.WriteLine("<ArrayOfDynamicAOI xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">");
+                foreach (string key in AOIdic.Keys)
+                {
+                    var x1_value = AOIdic[key].X1;
+                    var y1_value = AOIdic[key].Y1;
+                    var x2_value = AOIdic[key].X2;
+                    var y2_value = AOIdic[key].Y2;
+                    CreateDynamicAoiXml(id_aoi, x1_value, y1_value, x2_value, y2_value, xmlFile, key,
+                        AOIdic[key].Group, Constants.SENTENCE, AOIdic[key].IsTarget);
+                    id_aoi++;
+                }
+                xmlFile.WriteLine("</ArrayOfDynamicAOI>");
+                xmlFile.Close();
+            }
+
+            status_lbl.Text = $"{indexPage} " + "out of " + $"{imgs.Length}";
+            ClearData();
+            //in order to test the first page:
+            //break;
+            */
+            FileCreators.CreateBounderiesPhraseFile(AOIdic.Values.ToList(), imageName);
+            //FileCreators.CreateBounderiesWordsFile(infoWordsByPage., imageName, words_freq_cb.Checked, wordsMap);
 
             FileCreators.CreateTargetAOIDetectionFile(
             targetShortPhrases,
@@ -665,11 +688,9 @@ namespace Tesseract_OCR
             xmlFile.WriteLine("    </KeyFrames>");
             xmlFile.WriteLine("    <TrackedKeyFrames />");
             xmlFile.WriteLine("  </DynamicAOI>");
-            //id_aoi += 1;
-
         }
 
-        private void AoiAlgorithm(ref int aoiNumber, ref int aoiGroup) {
+        private void AoiAlgorithm(List<WordUnit> infoWords ,ref int aoiNumber, ref int aoiGroup) {
             // boolean var, if the word is in the sentences_list
             var inTargetSentence = false;
             var x2 = 0;
@@ -806,11 +827,7 @@ namespace Tesseract_OCR
 
             }
         }
-        private void ClearData()
-        {
-            infoWords.Clear();
-            AOIdic.Clear();
-        }
+
 
         private void ShortPhraseRecognition(WordUnit word)
         {
@@ -832,6 +849,7 @@ namespace Tesseract_OCR
                 }
             }
         }
+
 
 
         private bool AreSameLine(WordUnit word1, WordUnit word2)

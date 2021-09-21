@@ -52,7 +52,6 @@ namespace Tesseract_OCR.Services
             {
                 using (var wb = new ExcelPackage(new FileInfo(ExcelFilePath)))
                 {
-
                     ExcelWorksheet ws = wb.Workbook.Worksheets.First();
                     int firstRowUsed = ws.Dimension.Start.Row;
                     int lastColUsed = ws.Dimension.End.Column;
