@@ -32,7 +32,8 @@ namespace Tesseract_OCR
         public static List<List<string>> offTextRecognized = new List<List<string>>();
 
         Dictionary<int, List<WordUnit>> infoWordsByPage = new Dictionary<int, List<WordUnit>>();
-        Dictionary<int,Dictionary<string, AOI>> AOIdic = new Dictionary<int, Dictionary<string, AOI>>();
+        List<WordUnit> infoWordsAllText = new List<WordUnit>();
+        Dictionary<int,List<AOI>> AOIdic = new Dictionary<int, List<AOI>>();
 
 
         public string[] imagesPaths;
@@ -229,7 +230,7 @@ namespace Tesseract_OCR
 
             for (int indexPage = 1; indexPage <= imgs.Length; indexPage++)
             {
-                List<WordUnit> infoWords = new List<WordUnit>();
+                List<WordUnit> pageInfoWords = new List<WordUnit>();
 
                 using (var page = ocr.Process(imgs[indexPage - 1]))
                 {
@@ -254,7 +255,7 @@ namespace Tesseract_OCR
 
                                 var wordUnitName = StringService.RemovePunctuation(curText);
 
-                                WordUnit wordUnit = new WordUnit(wordUnitName, rect.X1, rect.Y1, rect.X2, rect.Y2, rect.Height, rect.Width);
+                                WordUnit wordUnit = new WordUnit(wordUnitName, indexPage, rect.X1, rect.Y1, rect.X2, rect.Y2, rect.Height, rect.Width);
                                 wordUnit.SetEndSign(curText);
 
 
@@ -271,13 +272,13 @@ namespace Tesseract_OCR
                                 wordUnit.WordIndex = wordIndex;
                                 wordIndex++;
                                 ShortPhraseRecognition(wordUnit);
-                                infoWords.Add(wordUnit);
+                                pageInfoWords.Add(wordUnit);
 
                             }
                         } while (iter.Next(myLevel));
 
                         // Off text word
-                        for (int i = 0; i < infoWords.Count; i++)
+                        for (int i = 0; i < pageInfoWords.Count; i++)
                         {
                             int phraseIndex = 0;
                             foreach (var phrase in offTextSentenecs)
@@ -285,11 +286,11 @@ namespace Tesseract_OCR
                                 var j = 0;
                                 var start = i;
                                 var phraseLength = phrase.Count;
-                                while (j < phraseLength && (i + j) < infoWords.Count && phrase[j] == infoWords[j + i].Name)
+                                while (j < phraseLength && (i + j) < pageInfoWords.Count && phrase[j] == pageInfoWords[j + i].Name)
                                     j++;
                                 if (j == phraseLength)
                                 {
-                                    infoWords.RemoveRange(start, phraseLength);
+                                    pageInfoWords.RemoveRange(start, phraseLength);
                                     offTextRecognized.Add(phrase);
                                 }
                                 phraseIndex++;
@@ -297,7 +298,7 @@ namespace Tesseract_OCR
                         }
 
 
-                        Thread frequencyWordThread = new Thread(() => FrequencyWord(wordsMap, infoWords, this.imageName + $"{indexPage}"));
+                        Thread frequencyWordThread = new Thread(() => FrequencyWord(wordsMap));
                         if (words_freq_cb.Checked)
                             frequencyWordThread.Start();
 
@@ -305,30 +306,30 @@ namespace Tesseract_OCR
                         var upperBound = int.MaxValue;
                         var lowerBound = 0;
 
-                        for (int f = 0; f <= infoWords.Count - 1; f++)
+                        for (int f = 0; f <= pageInfoWords.Count - 1; f++)
                         {
 
-                            if (f == infoWords.Count - 1)
+                            if (f == pageInfoWords.Count - 1)
                             {
                                 // if this is single word in the last line
                                 if (upperBound == int.MaxValue && lowerBound == 0)
                                 {
-                                    upperBound = infoWords[f].Y1;
-                                    lowerBound = infoWords[f].Y2;
+                                    upperBound = pageInfoWords[f].Y1;
+                                    lowerBound = pageInfoWords[f].Y2;
                                 }
                                 limits.Add(upperBound);
                                 limits.Add(lowerBound);
                                 break;
                             }
-                            if (AreSameLine(infoWords[f], infoWords[f + 1])) // same line
+                            if (AreSameLine(pageInfoWords[f], pageInfoWords[f + 1])) // same line
                             {
-                                if (infoWords[f].Y1 < upperBound)
+                                if (pageInfoWords[f].Y1 < upperBound)
                                 {
-                                    upperBound = infoWords[f].Y1;
+                                    upperBound = pageInfoWords[f].Y1;
                                 }
-                                if (infoWords[f].Y2 > lowerBound)
+                                if (pageInfoWords[f].Y2 > lowerBound)
                                 {
-                                    lowerBound = infoWords[f].Y2;
+                                    lowerBound = pageInfoWords[f].Y2;
                                 }
                             }
                             else
@@ -372,37 +373,37 @@ namespace Tesseract_OCR
                         var last_in_line = 0;
                         var first_line = 1;
                         var last_line = 0;
-                        for (int i = 0; i <= infoWords.Count - 1; i++)
+                        for (int i = 0; i <= pageInfoWords.Count - 1; i++)
                         {
-                            if ((i != infoWords.Count - 1) && AreSameLine(infoWords[i], infoWords[i + 1]))
+                            if ((i != pageInfoWords.Count - 1) && AreSameLine(pageInfoWords[i], pageInfoWords[i + 1]))
                             {
 
-                                var diff = infoWords[i].X1 - infoWords[i + 1].X2;
+                                var diff = pageInfoWords[i].X1 - pageInfoWords[i + 1].X2;
                                 var gap_for_padding = diff / 2;
-                                infoWords[i].X1 -= gap_for_padding;
-                                infoWords[i + 1].X2 += (gap_for_padding - 1);
-                                infoWords[i].Y1 = gaps[gap_num];
+                                pageInfoWords[i].X1 -= gap_for_padding;
+                                pageInfoWords[i + 1].X2 += (gap_for_padding - 1);
+                                pageInfoWords[i].Y1 = gaps[gap_num];
 
                             }
                             else
                             {
-                                infoWords[i].Y1 = gaps[gap_num];
+                                pageInfoWords[i].Y1 = gaps[gap_num];
                                 //add the right left padding 
-                                infoWords[i].X1 -= this.RL_padding;
-                                infoWords[first_in_line].X2 += this.RL_padding;
+                                pageInfoWords[i].X1 -= this.RL_padding;
+                                pageInfoWords[first_in_line].X2 += this.RL_padding;
                                 last_in_line = i;
                                 gap_num++;
-                                if (i == infoWords.Count - 1)
+                                if (i == pageInfoWords.Count - 1)
                                     last_line = 1;
                                 for (int j = first_in_line; j <= last_in_line; j++)
                                 {
-                                    if (first_line == 1 && infoWords[j].Y1 - this.UD_padding > 0)
-                                        infoWords[j].Y1 -= this.UD_padding;
+                                    if (first_line == 1 && pageInfoWords[j].Y1 - this.UD_padding > 0)
+                                        pageInfoWords[j].Y1 -= this.UD_padding;
 
-                                    infoWords[j].Y2 = gaps[gap_num];
+                                    pageInfoWords[j].Y2 = gaps[gap_num];
 
                                     if (last_line == 1)
-                                        infoWords[j].Y2 += this.UD_padding;
+                                        pageInfoWords[j].Y2 += this.UD_padding;
                                 }
                                 first_line = 0;
                                 first_in_line = i + 1;
@@ -413,69 +414,68 @@ namespace Tesseract_OCR
                             frequencyWordThread.Join();
                     }
                 }
-                infoWordsByPage[indexPage] = infoWords;
+                infoWordsByPage[indexPage] = pageInfoWords;
             }
+
             for (int indexPage = 1; indexPage <= imgs.Length; indexPage++)
             {
                 string stimulus = $"{imageName}_p{indexPage}";
                 FileCreators.CreateBounderiesWordsFile(infoWordsByPage[indexPage], stimulus, words_freq_cb.Checked, wordsMap);
+                System.IO.Directory.CreateDirectory(filesPath + @"\AOI templates");
+                string path = @"\AOI templates\" + this.imageName + $"_page{indexPage}" + "_w.xml";
+                using (StreamWriter xmlFile = new StreamWriter(filesPath + path, false, Encoding.UTF8))
+                {
+                    var id_aoi = 1;
+                    xmlFile.WriteLine("<?xml version=\"1.0\"?>");
+                    xmlFile.WriteLine("<ArrayOfDynamicAOI xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">");
+                    foreach (WordUnit word in infoWordsByPage[indexPage])
+                    {
+                        var x1_value = word.X1;
+                        var y1_value = word.Y1;
+                        var x2_value = word.X2;
+                        var y2_value = word.Y2;
+                        CreateDynamicAoiXml(id_aoi, x1_value, y1_value, x2_value, y2_value, xmlFile, word.WordIndex.ToString(),
+                            word.WordIndex.ToString(), Constants.NO_SENTENCE, false);
+                        id_aoi += 1;
+                    }
+                    xmlFile.WriteLine("</ArrayOfDynamicAOI>");
+                    xmlFile.Close();
+                }
+                infoWordsAllText.AddRange(infoWordsByPage[indexPage]);
             }
 
             AoiAlgorithm(ref aoiNumber, ref aoiGroup);
-
-            FileCreators.CreateBounderiesPhraseFile(new List<AOI>(AOIdic.Values), stimulus);
-            foreach (var aoi in AOIdic.Values)
+            List<AOI> aoiAllText = new List<AOI>();
+            for (int indexPage = 1; indexPage <= imgs.Length; indexPage++)
             {
-                aoiPhraseBounderies.Add(aoi);
-            }
+                List<AOI> aois = AOIdic[indexPage];
+                string stimulus = $"{imageName}_p{indexPage}";
+                FileCreators.CreateBounderiesPhraseFile(aois, stimulus);
 
-
-            System.IO.Directory.CreateDirectory(filesPath + @"\AOI templates");
-            string path = @"\AOI templates\" + this.imageName + $"_page{indexPage}" + "_w.xml";
-            using (StreamWriter xmlFile = new StreamWriter(filesPath + path, false, Encoding.UTF8))
-            {
-                var id_aoi = 1;
-                xmlFile.WriteLine("<?xml version=\"1.0\"?>");
-                xmlFile.WriteLine("<ArrayOfDynamicAOI xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">");
-                foreach (WordUnit word in infoWords)
+                FileCreators.CreateBounderiesWordsFile(infoWordsByPage[indexPage], stimulus, words_freq_cb.Checked, wordsMap);
+                string pathTarget = @"\AOI templates\" + this.imageName + $"_page{indexPage}" + "_c.xml";
+                using (StreamWriter xmlFile = new StreamWriter(filesPath + pathTarget, false, Encoding.UTF8))
                 {
-                    var x1_value = word.X1;
-                    var y1_value = word.Y1;
-                    var x2_value = word.X2;
-                    var y2_value = word.Y2;
-                    CreateDynamicAoiXml(id_aoi, x1_value, y1_value, x2_value, y2_value, xmlFile, word.WordIndex.ToString(),
-                        word.WordIndex.ToString(), Constants.NO_SENTENCE, false);
-                    id_aoi += 1;
+                    var id_aoi = 1;
+                    xmlFile.WriteLine("<?xml version=\"1.0\"?>");
+                    xmlFile.WriteLine("<ArrayOfDynamicAOI xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">");
+                    foreach (AOI aoi in aois)
+                    {
+                        var x1_value = aoi.X1;
+                        var y1_value = aoi.Y1;
+                        var x2_value = aoi.X2;
+                        var y2_value = aoi.Y2;
+                        CreateDynamicAoiXml(id_aoi, x1_value, y1_value, x2_value, y2_value, xmlFile, aoi.Name,
+                            aoi.Group, Constants.SENTENCE, aoi.IsTarget);
+                        id_aoi++;
+                    }
+                    xmlFile.WriteLine("</ArrayOfDynamicAOI>");
+                    xmlFile.Close();
                 }
-                xmlFile.WriteLine("</ArrayOfDynamicAOI>");
-                xmlFile.Close();
+                aoiAllText.AddRange(aois);
             }
-
-            string pathTarget = @"\AOI templates\" + this.imageName + $"_page{indexPage}" + "_c.xml";
-            using (StreamWriter xmlFile = new StreamWriter(filesPath + pathTarget, false, Encoding.UTF8))
-            {
-                var id_aoi = 1;
-                xmlFile.WriteLine("<?xml version=\"1.0\"?>");
-                xmlFile.WriteLine("<ArrayOfDynamicAOI xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">");
-                foreach (string key in AOIdic.Keys)
-                {
-                    var x1_value = AOIdic[key].X1;
-                    var y1_value = AOIdic[key].Y1;
-                    var x2_value = AOIdic[key].X2;
-                    var y2_value = AOIdic[key].Y2;
-                    CreateDynamicAoiXml(id_aoi, x1_value, y1_value, x2_value, y2_value, xmlFile, key,
-                        AOIdic[key].Group, Constants.SENTENCE, AOIdic[key].IsTarget);
-                    id_aoi++;
-                }
-                xmlFile.WriteLine("</ArrayOfDynamicAOI>");
-                xmlFile.Close();
-            }
-
-            status_lbl.Text = $"{indexPage} " + "out of " + $"{imgs.Length}";
-            //in order to test the first page:
-            //break;
-            FileCreators.CreateBounderiesPhraseFile(AOIdic.Values.ToList(), imageName);
-            //FileCreators.CreateBounderiesWordsFile(infoWordsByPage., imageName, words_freq_cb.Checked, wordsMap);
+            FileCreators.CreateBounderiesPhraseFile(aoiAllText, imageName);
+            FileCreators.CreateBounderiesWordsFile(infoWordsAllText, imageName, words_freq_cb.Checked, wordsMap);
 
             FileCreators.CreateTargetAOIDetectionFile(
             targetShortPhrases,
@@ -494,6 +494,10 @@ namespace Tesseract_OCR
         private Dictionary<string, List<string>> StartTargetSentenceDic(int index)
         {
             int tempIndex;
+            if (index == 529)
+            {
+                var x = 324;
+            }
             Dictionary<string, List<string>> candide = new Dictionary<string, List<string>>();
             foreach (KeyValuePair<string, List<string>> entry in targetSentences)
             {
@@ -501,7 +505,7 @@ namespace Tesseract_OCR
                 bool match = true;
                 foreach (string word in entry.Value)
                 {
-                    if (tempIndex >= infoWords.Count || word != infoWords[tempIndex].Name)
+                    if (tempIndex >= infoWordsAllText.Count || word != infoWordsAllText[tempIndex].Name)
                     {
                         match = false;
                         break;
@@ -523,7 +527,7 @@ namespace Tesseract_OCR
                 targetShortPhrases.Add(item.Key, new TargetShortPhrase(item.Value));
             }
         }
-        public static void FrequencyWord(Dictionary<string, int> wordsMap, List<WordUnit> info_words, string name_image)
+        public static void FrequencyWord(Dictionary<string, int> wordsMap)
         {
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             foreach (string word in wordsMap.Keys.ToList())
@@ -545,7 +549,7 @@ namespace Tesseract_OCR
 
 
 
-        public void CreateAOI(int name, int group, bool isTarget, string targetName, int x1, int y1, int x2, int y2)
+        public void CreateAOI(int page, int name, int group, bool isTarget, string targetName, int x1, int y1, int x2, int y2)
         {
             AOI aoi = new AOI();
             aoi.Name = name.ToString();
@@ -559,7 +563,11 @@ namespace Tesseract_OCR
             aoi.IsTarget = isTarget;
             if (aoi.IsTarget)
                 aoi.TargetName = targetName;
-            AOIdic.Add(aoi.Name, aoi);
+            if (AOIdic.ContainsKey(page))
+                AOIdic[page].Add(aoi);
+            else
+                AOIdic[page] = new List<AOI>() { aoi };
+            
         }
         public void CreateDynamicAoiXml(int id_aoi, int x1_value, int y1_value, int x2_value, int y2_value,
             StreamWriter xmlFile, string name, string group, int with_sentence, bool isTarget)
@@ -622,13 +630,7 @@ namespace Tesseract_OCR
             var name_aoi = "AOI " + triple_digits;
             if (with_sentence == 0)
             {
-                /*
-                if (singleWords.ContainsKey(name))
-                {
-                    targetWordsRecognized.Add(name);
-                    name_aoi = singleWords[name];
-                }
-                */
+
             }
             else
             {
@@ -688,21 +690,22 @@ namespace Tesseract_OCR
             xmlFile.WriteLine("  </DynamicAOI>");
         }
 
-        private void AoiAlgorithm(List<WordUnit> infoWords ,ref int aoiNumber, ref int aoiGroup) {
+        private void AoiAlgorithm(ref int aoiNumber, ref int aoiGroup) {
             // boolean var, if the word is in the sentences_list
             var inTargetSentence = false;
             var x2 = 0;
             var y2 = 0;
             var x1_prev = 0;
             var y1_prev = 0;
+            var prev_page = 0;
             var parts = false;
             var phase_counter = 0;
             var custom_key = "";
             Dictionary<string, List<string>> candide = new Dictionary<string, List<string>>();
 
-            for (int i = 0; i < infoWords.Count; i++)
+            for (int i = 0; i < infoWordsAllText.Count; i++)
             {   
-                WordUnit word = infoWords[i];
+                WordUnit word = infoWordsAllText[i];
                 x2 = word.X2;
                 y2 = word.Y2;
                 candide = StartTargetSentenceDic(i);
@@ -727,7 +730,8 @@ namespace Tesseract_OCR
                                 inTargetSentence = false;
                                 if (parts)
                                 {
-                                    AOIdic.Remove(aoiNumber.ToString());
+                                    // TODO: make remove aoi by from dictionary
+                     //               AOIdic.Remove(aoiNumber.ToString());
                                     parts = true;
                                 }
                                 break;
@@ -740,7 +744,7 @@ namespace Tesseract_OCR
                                 if (match == entry.Value.Count) // the end 
                                 {
                                     targetSentencesRecognized.Add(entry.Key);
-                                    CreateAOI(aoiNumber, aoiGroup, inTargetSentence, entry.Key, word.X1, word.Y1, x2, y2);
+                                    CreateAOI(word.Page, aoiNumber, aoiGroup, inTargetSentence, entry.Key, word.X1, word.Y1, x2, y2);
                                     inTargetSentence = false;
                                     aoiNumber += 1;
                                     aoiGroup += 1;
@@ -749,12 +753,13 @@ namespace Tesseract_OCR
                                 }
                                 x1_prev = word.X1;
                                 y1_prev = word.Y1;
+                                prev_page = word.Page;
                             }
                             // if the current word in the target sentence is in a new line, create AOI for the 
                             // sentence until that word
                             else
                             {
-                                CreateAOI(aoiNumber, aoiGroup, inTargetSentence, entry.Key, x1_prev, y1_prev, x2, y2);
+                                CreateAOI(prev_page, aoiNumber, aoiGroup, inTargetSentence, entry.Key, x1_prev, y1_prev, x2, y2);
                                 // new section of the AOI
                                 parts = true;
                                 aoiNumber += 1;
@@ -762,11 +767,13 @@ namespace Tesseract_OCR
                                 y2 = word.Y2;
                                 x1_prev = word.X1;
                                 y1_prev = word.Y1;
+                                prev_page = word.Page;
+
 
                                 // if the current word is the last in the target sentence
                                 if (match == entry.Value.Count) 
                                 {
-                                    CreateAOI(aoiNumber, aoiGroup, inTargetSentence, entry.Key, word.X1, word.Y1, word.X2, word.Y2);
+                                    CreateAOI(word.Page, aoiNumber, aoiGroup, inTargetSentence, entry.Key, word.X1, word.Y1, word.X2, word.Y2);
                                     targetSentencesRecognized.Add(entry.Key);
                                     sentence_recognized = true;
                                     inTargetSentence = false;
@@ -777,15 +784,15 @@ namespace Tesseract_OCR
                             }
                             i += 1;
                             // if the current word is the last in the page
-                            if (i == infoWords.Count)
+                            if (i == infoWordsAllText.Count)
                                 break;
-                            word = infoWords[i];
+                            word = infoWordsAllText[i];
                         }
                         if (sentence_recognized)
                             break;
                         else
                         {
-                            word = infoWords[start_index];
+                            word = infoWordsAllText[start_index];
                             i = start_index;
                             match = 0;
                         }
@@ -794,30 +801,30 @@ namespace Tesseract_OCR
                 }
                 else
                 {
-                    while (i < infoWords.Count)
+                    while (i < infoWordsAllText.Count)
                     {
-                        word = infoWords[i];
+                        word = infoWordsAllText[i];
                         x1_prev = word.X1;
                         y1_prev = word.Y1;
                         phase_counter += 1;
                         parts = false;
                         if ((word.EndWithPunctuation && phase_counter >= minium_phrase_len) ||
                             word.EndOfSentence ||
-                             (i+1 < infoWords.Count && StartTargetSentenceDic(i + 1).Count != 0))
+                             (i+1 < infoWordsAllText.Count && StartTargetSentenceDic(i + 1).Count != 0))
                         {
                             phase_counter = 0;
                             break;
                         }
 
                         // different line with more than one word in the prev line
-                        if (i+1 < infoWords.Count && word.Y1 != infoWords[i+1].Y1)
+                        if (i+1 < infoWordsAllText.Count && word.Y1 != infoWordsAllText[i+1].Y1)
                         {
                             parts = true;
                             break;
                         }
                         i += 1;
                     }
-                    CreateAOI(aoiNumber, aoiGroup, inTargetSentence, null, word.X1, word.Y1, x2, y2);
+                    CreateAOI(word.Page, aoiNumber, aoiGroup, inTargetSentence, null, word.X1, word.Y1, x2, y2);
                     aoiNumber += 1;
                     if (!parts)
                         aoiGroup += 1;

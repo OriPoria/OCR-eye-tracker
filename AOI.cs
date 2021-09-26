@@ -19,7 +19,9 @@ namespace Tesseract_OCR
         public int Y2 { get; set; }
         public int Height { get; set; }
         public int Width { get; set; }
-       
-            
+        public bool IsTarget { get; set; }
+        public string TargetName { get; set; }
+
+
     }
 }
