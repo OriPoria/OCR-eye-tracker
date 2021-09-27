@@ -523,9 +523,7 @@ namespace Tesseract_OCR
             offTextSentenecs = offText;
             targetSentences = sentences;
             foreach (KeyValuePair<string,List<string>> item in shortUnits)
-            {
                 targetShortPhrases.Add(item.Key, new TargetShortPhrase(item.Value));
-            }
         }
         public static void FrequencyWord(Dictionary<string, int> wordsMap)
         {
@@ -567,7 +565,6 @@ namespace Tesseract_OCR
                 AOIdic[page].Add(aoi);
             else
                 AOIdic[page] = new List<AOI>() { aoi };
-            
         }
         public void CreateDynamicAoiXml(int id_aoi, int x1_value, int y1_value, int x2_value, int y2_value,
             StreamWriter xmlFile, string name, string group, int with_sentence, bool isTarget)
