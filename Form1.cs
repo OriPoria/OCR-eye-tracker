@@ -569,18 +569,6 @@ namespace Tesseract_OCR
         public void CreateDynamicAoiXml(int id_aoi, int x1_value, int y1_value, int x2_value, int y2_value,
             StreamWriter xmlFile, string name, string group, int with_sentence, bool isTarget)
         {
-            var is_tens = 0;
-            var is_hunderd = 0;
-
-            if (id_aoi > 9 && id_aoi < 100)
-            {
-                is_tens = 1;
-            }
-            else if (id_aoi >= 100)
-            {
-                is_hunderd = 1;
-            }
-
             var x1_line = "        <X>" + x1_value + "</X>";
             var y1_line = "        <Y>" + y1_value + "</Y>";
             var x2_line = "        <X>" + x2_value + "</X>";
@@ -610,21 +598,9 @@ namespace Tesseract_OCR
             xmlFile.WriteLine("    <Type>Rectangle</Type>");
             xmlFile.WriteLine("    <Style>HalfTransparent</Style>");
             xmlFile.WriteLine("    <HatchStyle>DarkDownwardDiagonal</HatchStyle>");
-            var triple_digits = " ";
-            if (is_hunderd == 0 && is_tens == 0)
-            {
-                triple_digits = "00" + id_aoi;
-            }
-            if (is_tens == 1)
-            {
-                triple_digits = "0" + id_aoi;
-            }
-            else if (is_hunderd == 1)
-            {
-                triple_digits = id_aoi.ToString();
-            }
 
-            var name_aoi = "AOI " + triple_digits;
+
+            var name_aoi = id_aoi.ToString();
             if (with_sentence == 0)
             {
 
