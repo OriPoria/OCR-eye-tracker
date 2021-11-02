@@ -228,36 +228,9 @@ namespace Tesseract_OCR
             this.resolutions_lb.ItemHeight = 20;
             this.resolutions_lb.Items.AddRange(new object[] {
             "1398X1082",
-            "1770X1080",
             "1920X1080",
             "1905X1082",
-            "1450X1082",
-            "1455X1082",
-            "1460X1082",
-            "1461X1082",
-            "1462X1082",
-            "1463X1082",
-            "1464X1082",
-            "1465X1082",
-            "1466X1082",
-            "1467X1082",
-            "1468X1082",
-            "1469X1082",
-            "1470X1082",
-            "1471X1082",
-            "1472X1082",
-            "1473X1082",
-            "1474X1082",
-            "1475X1082",
-            "1476X1082",
-            "1477X1082",
-            "1478X1082",
-            "1479X1082",
-            "1480X1082",
-            "1485X1082",
-            "1490X1082",
-            "1495X1082",
-            "1500X1082"});
+            "1450X1082"});
             this.resolutions_lb.Location = new System.Drawing.Point(210, 64);
             this.resolutions_lb.Name = "resolutions_lb";
             this.resolutions_lb.Size = new System.Drawing.Size(120, 24);
