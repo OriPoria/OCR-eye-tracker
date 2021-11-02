@@ -142,7 +142,6 @@ namespace Tesseract_OCR
             this.mini_phase.Size = new System.Drawing.Size(48, 26);
             this.mini_phase.TabIndex = 11;
             this.mini_phase.Text = "3";
-            this.mini_phase.TextChanged += new System.EventHandler(this.mini_phase_Click);
             // 
             // inch_ud_lbl
             // 
@@ -229,6 +228,9 @@ namespace Tesseract_OCR
             this.resolutions_lb.ItemHeight = 20;
             this.resolutions_lb.Items.AddRange(new object[] {
             "1398X1082",
+            "1770X1080",
+            "1920X1080",
+            "1905X1082",
             "1450X1082",
             "1455X1082",
             "1460X1082",

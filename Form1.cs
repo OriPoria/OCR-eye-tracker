@@ -68,10 +68,6 @@ namespace Tesseract_OCR
         {
             this.UD_padding = Int32.Parse(UDinch.Text);            
         }
-        private void mini_phase_Click(object sender, EventArgs e)
-        {
-            this.minium_phrase_len= Int32.Parse(mini_phase.Text);
-        }
         private void text_name_tb_Click(object sender, EventArgs e)
         {
             this.text_name_tb.Text = "";
@@ -201,6 +197,7 @@ namespace Tesseract_OCR
 
         private void start_btn_Click(object sender, EventArgs e)
         {
+            minium_phrase_len = Int32.Parse(mini_phase.Text);
             status_lbl.Text = "Loading...";
             this.Refresh();
             if (imagesPaths == null)
@@ -827,7 +824,6 @@ namespace Tesseract_OCR
                 }
             }
         }
-
 
 
         private bool AreSameLine(WordUnit word1, WordUnit word2)
