@@ -49,7 +49,7 @@ namespace Tesseract_OCR
             this.upload_word_btn = new System.Windows.Forms.Button();
             this.instructions_lbl = new System.Windows.Forms.Label();
             this.link_lbl = new System.Windows.Forms.LinkLabel();
-            this.resolutions_lb = new System.Windows.Forms.ListBox();
+            this.resolutions_tb = new System.Windows.Forms.TextBox();
             this.resolutions_lbl = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -223,18 +223,13 @@ namespace Tesseract_OCR
             this.link_lbl.Text = "https://pdftoimage.com";
             this.link_lbl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_lbl_LinkClicked);
             // 
-            // resolutions_lb
+            // resolutions_tb
             // 
-            this.resolutions_lb.ItemHeight = 20;
-            this.resolutions_lb.Items.AddRange(new object[] {
-            "1398X1082",
-            "1920X1080",
-            "1905X1082",
-            "1450X1082"});
-            this.resolutions_lb.Location = new System.Drawing.Point(210, 64);
-            this.resolutions_lb.Name = "resolutions_lb";
-            this.resolutions_lb.Size = new System.Drawing.Size(120, 24);
-            this.resolutions_lb.TabIndex = 18;
+            this.resolutions_tb.Text = "1398X1082";
+            this.resolutions_tb.Location = new System.Drawing.Point(210, 64);
+            this.resolutions_tb.Name = "resolutions_lb";
+            this.resolutions_tb.Size = new System.Drawing.Size(120, 24);
+            this.resolutions_tb.TabIndex = 18;
             // 
             // resolutions_lbl
             // 
@@ -267,7 +262,7 @@ namespace Tesseract_OCR
             this.Controls.Add(this.upload_word_btn);
             this.Controls.Add(this.instructions_lbl);
             this.Controls.Add(this.link_lbl);
-            this.Controls.Add(this.resolutions_lb);
+            this.Controls.Add(this.resolutions_tb);
             this.Controls.Add(this.resolutions_lbl);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.Margin = new System.Windows.Forms.Padding(4);
@@ -304,7 +299,7 @@ namespace Tesseract_OCR
         private System.Windows.Forms.Label status_lbl;
         private System.Windows.Forms.Label instructions_lbl;
         private System.Windows.Forms.LinkLabel link_lbl;
-        private System.Windows.Forms.ListBox resolutions_lb;
+        private System.Windows.Forms.TextBox resolutions_tb;
         private System.Windows.Forms.Label resolutions_lbl;
 
         //private System.Windows.Forms.Button pic_click;

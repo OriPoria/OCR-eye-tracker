@@ -141,7 +141,7 @@ namespace Tesseract_OCR
         {
             int width = 0;
             int height = 0;
-            var resolutionItem = resolutions_lb.SelectedItem;
+            var resolutionItem = resolutions_tb.Text;
             if (resolutionItem == null)
             {
                 MessageBox.Show("Image resolution is not selected");
