@@ -102,14 +102,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Tesseract-OCR.exe" size="74752">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Tesseract-OCR.exe" size="76800">
       <assemblyIdentity name="Tesseract-OCR" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>DdFxGUH3v7PeCl22zwoXHZnpgsWBX+nY6dGB0kgvmcE=</dsig:DigestValue>
+        <dsig:DigestValue>Kr4itLyUxBKHh3Qai20pDr7fMdREzzh82txEWBGdn1E=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
