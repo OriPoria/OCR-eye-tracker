@@ -249,7 +249,6 @@ namespace Tesseract_OCR
         {
             // added license of the package, watch: https://epplussoftware.com/developers/licenseexception
             ExcelPackage.LicenseContext = LicenseContext.Commercial;
-
             List<WordBoundaries> wordsTable = new List<WordBoundaries>();
             using (var wb = new ExcelPackage())
             {

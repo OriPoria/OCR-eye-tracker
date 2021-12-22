@@ -49,13 +49,15 @@ namespace Tesseract_OCR
             this.upload_word_btn = new System.Windows.Forms.Button();
             this.instructions_lbl = new System.Windows.Forms.Label();
             this.link_lbl = new System.Windows.Forms.LinkLabel();
+            this.resolutions_tb = new System.Windows.Forms.TextBox();
+            this.resolutions_lbl = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // start_btn
             // 
             this.start_btn.BackColor = System.Drawing.SystemColors.MenuHighlight;
             this.start_btn.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.start_btn.Location = new System.Drawing.Point(32, 481);
+            this.start_btn.Location = new System.Drawing.Point(36, 498);
             this.start_btn.Margin = new System.Windows.Forms.Padding(4);
             this.start_btn.Name = "start_btn";
             this.start_btn.Size = new System.Drawing.Size(326, 48);
@@ -70,7 +72,7 @@ namespace Tesseract_OCR
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(61, 267);
+            this.button3.Location = new System.Drawing.Point(66, 298);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(264, 43);
             this.button3.TabIndex = 4;
@@ -80,7 +82,7 @@ namespace Tesseract_OCR
             // 
             // RLinch
             // 
-            this.RLinch.Location = new System.Drawing.Point(220, 335);
+            this.RLinch.Location = new System.Drawing.Point(225, 366);
             this.RLinch.Name = "RLinch";
             this.RLinch.Size = new System.Drawing.Size(48, 26);
             this.RLinch.TabIndex = 7;
@@ -90,7 +92,7 @@ namespace Tesseract_OCR
             // pad_rl_lbl
             // 
             this.pad_rl_lbl.AutoSize = true;
-            this.pad_rl_lbl.Location = new System.Drawing.Point(28, 335);
+            this.pad_rl_lbl.Location = new System.Drawing.Point(33, 366);
             this.pad_rl_lbl.Name = "pad_rl_lbl";
             this.pad_rl_lbl.Size = new System.Drawing.Size(175, 20);
             this.pad_rl_lbl.TabIndex = 8;
@@ -100,7 +102,7 @@ namespace Tesseract_OCR
             // inch_rl_lbl
             // 
             this.inch_rl_lbl.AutoSize = true;
-            this.inch_rl_lbl.Location = new System.Drawing.Point(274, 335);
+            this.inch_rl_lbl.Location = new System.Drawing.Point(279, 366);
             this.inch_rl_lbl.Name = "inch_rl_lbl";
             this.inch_rl_lbl.Size = new System.Drawing.Size(40, 20);
             this.inch_rl_lbl.TabIndex = 9;
@@ -109,7 +111,7 @@ namespace Tesseract_OCR
             // pad_ud_lbl
             // 
             this.pad_ud_lbl.AutoSize = true;
-            this.pad_ud_lbl.Location = new System.Drawing.Point(28, 365);
+            this.pad_ud_lbl.Location = new System.Drawing.Point(33, 396);
             this.pad_ud_lbl.Name = "pad_ud_lbl";
             this.pad_ud_lbl.Size = new System.Drawing.Size(176, 20);
             this.pad_ud_lbl.TabIndex = 10;
@@ -118,7 +120,7 @@ namespace Tesseract_OCR
             // minimum_phase_lbl
             // 
             this.minimum_phase_lbl.AutoSize = true;
-            this.minimum_phase_lbl.Location = new System.Drawing.Point(28, 395);
+            this.minimum_phase_lbl.Location = new System.Drawing.Point(33, 426);
             this.minimum_phase_lbl.Name = "minimum_phase_lbl";
             this.minimum_phase_lbl.Size = new System.Drawing.Size(188, 20);
             this.minimum_phase_lbl.TabIndex = 10;
@@ -126,7 +128,7 @@ namespace Tesseract_OCR
             // 
             // UDinch
             // 
-            this.UDinch.Location = new System.Drawing.Point(220, 365);
+            this.UDinch.Location = new System.Drawing.Point(225, 396);
             this.UDinch.Name = "UDinch";
             this.UDinch.Size = new System.Drawing.Size(48, 26);
             this.UDinch.TabIndex = 11;
@@ -135,17 +137,16 @@ namespace Tesseract_OCR
             // 
             // mini_phase
             // 
-            this.mini_phase.Location = new System.Drawing.Point(220, 395);
+            this.mini_phase.Location = new System.Drawing.Point(225, 426);
             this.mini_phase.Name = "mini_phase";
             this.mini_phase.Size = new System.Drawing.Size(48, 26);
             this.mini_phase.TabIndex = 11;
             this.mini_phase.Text = "3";
-            this.mini_phase.TextChanged += new System.EventHandler(this.mini_phase_Click);
             // 
             // inch_ud_lbl
             // 
             this.inch_ud_lbl.AutoSize = true;
-            this.inch_ud_lbl.Location = new System.Drawing.Point(274, 365);
+            this.inch_ud_lbl.Location = new System.Drawing.Point(279, 396);
             this.inch_ud_lbl.Name = "inch_ud_lbl";
             this.inch_ud_lbl.Size = new System.Drawing.Size(40, 20);
             this.inch_ud_lbl.TabIndex = 12;
@@ -164,7 +165,7 @@ namespace Tesseract_OCR
             // status_lbl
             // 
             this.status_lbl.BackColor = System.Drawing.SystemColors.InactiveCaption;
-            this.status_lbl.Location = new System.Drawing.Point(32, 537);
+            this.status_lbl.Location = new System.Drawing.Point(32, 554);
             this.status_lbl.Margin = new System.Windows.Forms.Padding(4);
             this.status_lbl.Name = "status_lbl";
             this.status_lbl.Size = new System.Drawing.Size(326, 35);
@@ -174,7 +175,7 @@ namespace Tesseract_OCR
             // upload_imges_btn
             // 
             this.upload_imges_btn.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.upload_imges_btn.Location = new System.Drawing.Point(61, 63);
+            this.upload_imges_btn.Location = new System.Drawing.Point(66, 94);
             this.upload_imges_btn.Name = "upload_imges_btn";
             this.upload_imges_btn.Size = new System.Drawing.Size(264, 50);
             this.upload_imges_btn.TabIndex = 15;
@@ -185,7 +186,7 @@ namespace Tesseract_OCR
             // words_freq_cb
             // 
             this.words_freq_cb.AutoSize = true;
-            this.words_freq_cb.Location = new System.Drawing.Point(65, 436);
+            this.words_freq_cb.Location = new System.Drawing.Point(70, 467);
             this.words_freq_cb.Name = "words_freq_cb";
             this.words_freq_cb.Size = new System.Drawing.Size(229, 24);
             this.words_freq_cb.TabIndex = 16;
@@ -195,7 +196,7 @@ namespace Tesseract_OCR
             // upload_word_btn
             // 
             this.upload_word_btn.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.upload_word_btn.Location = new System.Drawing.Point(61, 119);
+            this.upload_word_btn.Location = new System.Drawing.Point(66, 150);
             this.upload_word_btn.Name = "upload_word_btn";
             this.upload_word_btn.Size = new System.Drawing.Size(264, 50);
             this.upload_word_btn.TabIndex = 15;
@@ -205,7 +206,7 @@ namespace Tesseract_OCR
             // 
             // instructions_lbl
             // 
-            this.instructions_lbl.Location = new System.Drawing.Point(57, 187);
+            this.instructions_lbl.Location = new System.Drawing.Point(62, 218);
             this.instructions_lbl.Name = "instructions_lbl";
             this.instructions_lbl.Size = new System.Drawing.Size(280, 40);
             this.instructions_lbl.TabIndex = 12;
@@ -214,13 +215,29 @@ namespace Tesseract_OCR
             // 
             // link_lbl
             // 
-            this.link_lbl.Location = new System.Drawing.Point(109, 227);
+            this.link_lbl.Location = new System.Drawing.Point(114, 258);
             this.link_lbl.Name = "link_lbl";
             this.link_lbl.Size = new System.Drawing.Size(184, 23);
             this.link_lbl.TabIndex = 17;
             this.link_lbl.TabStop = true;
             this.link_lbl.Text = "https://pdftoimage.com";
             this.link_lbl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.link_lbl_LinkClicked);
+            // 
+            // resolutions_tb
+            // 
+            this.resolutions_tb.Text = "1398X1082";
+            this.resolutions_tb.Location = new System.Drawing.Point(210, 64);
+            this.resolutions_tb.Name = "resolutions_lb";
+            this.resolutions_tb.Size = new System.Drawing.Size(120, 24);
+            this.resolutions_tb.TabIndex = 18;
+            // 
+            // resolutions_lbl
+            // 
+            this.resolutions_lbl.Location = new System.Drawing.Point(66, 64);
+            this.resolutions_lbl.Name = "resolutions_lbl";
+            this.resolutions_lbl.Size = new System.Drawing.Size(150, 23);
+            this.resolutions_lbl.TabIndex = 19;
+            this.resolutions_lbl.Text = "Image resolution:";
             // 
             // Form1
             // 
@@ -245,6 +262,8 @@ namespace Tesseract_OCR
             this.Controls.Add(this.upload_word_btn);
             this.Controls.Add(this.instructions_lbl);
             this.Controls.Add(this.link_lbl);
+            this.Controls.Add(this.resolutions_tb);
+            this.Controls.Add(this.resolutions_lbl);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(177)));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
@@ -254,6 +273,8 @@ namespace Tesseract_OCR
             this.PerformLayout();
 
         }
+
+
 
 
 
@@ -278,6 +299,8 @@ namespace Tesseract_OCR
         private System.Windows.Forms.Label status_lbl;
         private System.Windows.Forms.Label instructions_lbl;
         private System.Windows.Forms.LinkLabel link_lbl;
+        private System.Windows.Forms.TextBox resolutions_tb;
+        private System.Windows.Forms.Label resolutions_lbl;
 
         //private System.Windows.Forms.Button pic_click;
     }
