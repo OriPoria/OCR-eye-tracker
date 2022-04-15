@@ -21,7 +21,7 @@ namespace Tesseract_OCR.Services
         }
         public string MatchWords(string ocrWord, int index)
         {
-            if (index == 130)
+            if (index == 0)
             {
                 var x = 3;
             }
@@ -67,6 +67,9 @@ namespace Tesseract_OCR.Services
         private bool AreDifferent(string str1, string str2)
         {
             int minimumLen = Math.Min(str1.Length, str2.Length);
+            int maximumLen = Math.Max(str1.Length, str2.Length);
+            if (maximumLen - minimumLen > 4)
+                return true;
             double similarCharCounter = 0.0;
             for (int i = 0; i < minimumLen; i++)
             {
